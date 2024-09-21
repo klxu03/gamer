@@ -7,23 +7,7 @@ export function createCity(size) {
         for (let x = 0; x < size; x++) {
             const column = [];
             for (let y = 0; y < size; y++) {
-                const tile = {
-                    x, 
-                    y,
-                    building: null,
-                    update() {
-                        if (Math.random() < 0.01) {
-                            if (this.building === null) {
-                                this.building = "building-1";
-                            } else {
-                                const height = Number(this.building.slice(-1));
-                                if (height < 4) {
-                                    this.building = `building-${height + 1}`;
-                                }
-                            }
-                        }
-                    }
-                };
+                const tile = createTile(x, y);
 
                 column.push(tile);
             }
@@ -32,7 +16,6 @@ export function createCity(size) {
     }
 
     function update() {
-        console.log("Updating city");
         for (let x = 0; x < size; x++) {
             for (let y = 0; y < size; y++) {
                 data[x][y].update();
@@ -45,4 +28,25 @@ export function createCity(size) {
         data,
         update
     }
+}
+
+const createTile = (x, y) => {
+    return {
+        x, 
+        y,
+        terrainId: "grass",
+        buildingId: null,
+        update() {
+            if (Math.random() < 0.01) {
+                if (this.buildingId === null) {
+                    this.buildingId = "building-1";
+                } else {
+                    const height = Number(this.buildingId.slice(-1));
+                    if (height < 3) {
+                        this.buildingId = `building-${height + 1}`;
+                    }
+                }
+            }
+        }
+    };
 }
