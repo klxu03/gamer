@@ -38,16 +38,19 @@ export function createScene() {
         console.log("mouse down", event.button);
         camera.onMouseDown(event);
     }
+    gameWindow.addEventListener("mousedown", onMouseDown);
 
     function onMouseUp(event) {
         console.log("mouse up", event.button);
         camera.onMouseUp(event);
     }
+    gameWindow.addEventListener("mouseup", onMouseUp);
 
     function onMouseMove(event) {
         console.log("mouse move");
         camera.onMouseMove(event);
     }
+    gameWindow.addEventListener("mousemove", onMouseMove);
 
     return {
         start,
@@ -57,6 +60,9 @@ export function createScene() {
         onMouseMove,
         cleanup: () => {
             gameWindow.removeEventListener("contextmenu", preventContextMenu);
+            gameWindow.removeEventListener("mousedown", onMouseDown);
+            gameWindow.removeEventListener("mouseup", onMouseUp);
+            gameWindow.removeEventListener("mousemove", onMouseMove);
         }
     }
 }
