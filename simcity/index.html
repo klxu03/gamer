@@ -18,11 +18,9 @@
         </div>
 
         <script type="module">
-            import { createScene } from "./src/scene.js";
-
-            window.onload = () => {
-                window.scene = createScene();
-                window.scene.start();
+            import { createGame } from './src/game.js';
+            window.onload = () => { 
+                window.game = createGame()
             };
         </script>
     </body>render-target   
