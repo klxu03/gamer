@@ -11,6 +11,9 @@ export function createScene() {
     const camera = createCamera(gameWindow);
     const renderer = new THREE.WebGLRenderer();
     renderer.setSize(gameWindow.offsetWidth, gameWindow.offsetHeight);
+    renderer.setClearColor(0x000000, 0);
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     gameWindow.appendChild(renderer.domElement);
 
     const raycaster = new THREE.Raycaster();
@@ -56,7 +59,7 @@ export function createScene() {
                 // Data model has changed, change mesh
                 if (tile.building && tile.building.dirty) {
                     scene.remove(existingBuildingMesh);
-                    buildings[x][y] = createAssetInstance(tile.building.id, x, y, tile.building);
+                    buildings[x][y] = createAssetInstance(tile.building.type, x, y, tile.building);
                     scene.add(buildings[x][y]);
                     tile.building.dirty = false;
                 }
@@ -65,18 +68,27 @@ export function createScene() {
     }
 
     function setupLights() {
+        const sun = new THREE.DirectionalLight(0xffffff, 2);
+        sun.position.set(20, 20, 20);
+        sun.castShadow = true;
+        sun.shadow.camera.left = -10;
+        sun.shadow.camera.right = 10;
+        sun.shadow.camera.top = 0;
+        sun.shadow.camera.bottom = -10;
+        sun.shadow.mapSize.width = 1024; // quality of shadow, can make smaller
+        sun.shadow.mapSize.height = 1024;
+        sun.shadow.camera.near = 0.5;
+        sun.shadow.camera.far = 50;
+
         const lights = [
-            new THREE.AmbientLight(0xffffff, 0.2),
-            new THREE.DirectionalLight(0xffffff, 3),
-            new THREE.DirectionalLight(0xffffff, 1),
-            new THREE.DirectionalLight(0xffffff, 0.3)
+            new THREE.AmbientLight(0xffffff, 0.3),
+            sun,
         ];
 
-        lights[1].position.set(0, 1, 0);
-        lights[2].position.set(1, 1, 0);
-        lights[3].position.set(0, 1, 1);
-
         scene.add(...lights);
+
+        // const helper = new THREE.CameraHelper(sun.shadow.camera);
+        // scene.add( helper );
     }
 
     function draw() {
@@ -102,6 +114,9 @@ export function createScene() {
         mouse.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1;
         mouse.y = -(event.clientY / renderer.domElement.clientHeight) * 2 + 1;
 
+        // Update the camera's world matrix 
+        camera.camera.updateMatrixWorld();
+        
         raycaster.setFromCamera(mouse, camera.camera);
 
         let intersections = raycaster.intersectObjects(scene.children, false);

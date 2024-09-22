@@ -1,13 +1,13 @@
 const buildingFactory = {
     "residential": () => {
         return {
-            id: "residential",
+            type: "residential",
             height: 1,
             dirty: true,
             update: function() {
                 console.log("updating residential");
                 this.dirty = false;
-                if (Math.random() < 0.005) {
+                if (Math.random() < 0.5) {
                     if (this.height < 5) {
                         this.height++;
                         this.dirty = true;
@@ -18,12 +18,12 @@ const buildingFactory = {
     },
     "commercial": () => {
         return {
-            id: "commercial",
+            type: "commercial",
             height: 1,
             dirty: true,
             update: function() {
                 this.dirty = false;
-                if (Math.random() < 0.005) {
+                if (Math.random() < 0.5) {
                     if (this.height < 5) {
                         this.height++;
                         this.dirty = true;
@@ -34,12 +34,12 @@ const buildingFactory = {
     },
     "industrial": () => {
         return {
-            id: "industrial",
+            type: "industrial",
             height: 1,
             dirty: true,
             update: function() {
                 this.dirty = false;
-                if (Math.random() < 0.005) {
+                if (Math.random() < 0.5) {
                     if (this.height < 5) {
                         this.height++;
                         this.dirty = true;
@@ -50,7 +50,7 @@ const buildingFactory = {
     },
     "road": () => {
         return {
-            id: "road",
+            type: "road",
             dirty: true,
             update: function() {
                 this.dirty = false;
