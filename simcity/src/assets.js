@@ -9,7 +9,7 @@ const createAssetsFactory = () => {
         "grass": (x, y) => {
             const material = new THREE.MeshLambertMaterial({ color: 0x00aa00 });
             const mesh = new THREE.Mesh(geometry, material);
-            mesh.userData = { id: "grass" };
+            mesh.userData = { id: "grass", x, y };
             mesh.position.set(x, -0.5, y);
             return mesh;
         }
@@ -17,13 +17,16 @@ const createAssetsFactory = () => {
 
     const addBuildings = () => {
         const MAX_BUILDING_HEIGHT = 3;
-        const material = new THREE.MeshLambertMaterial({ color: 0x777777 });
 
-        for (let i = 0; i < MAX_BUILDING_HEIGHT; i++) {
+        const buildingColors = [-1, 0xff0000, 0x00ff22, 0x0000ff];
+
+        for (let i = 1; i <= MAX_BUILDING_HEIGHT; i++) {
+            console.log("creating building", i);
             assets[`building-${i}`] = (x, y) => {
                 const height = i;
+                const material = new THREE.MeshLambertMaterial({ color: buildingColors[i] });
                 const mesh = new THREE.Mesh(geometry, material);
-                mesh.userData = { id: `building-${i}` };
+                mesh.userData = { id: `building-${i}`, x, y };
                 mesh.scale.set(1, height, 1);
                 mesh.position.set(x, height/2, y);
                 return mesh;
@@ -36,9 +39,9 @@ const createAssetsFactory = () => {
     return assets;
 }
 
-export function createAssetInstance(assetId, x, y) {
-    const assets = createAssetsFactory();
+const assets = createAssetsFactory();
 
+export function createAssetInstance(assetId, x, y) {
     if (assetId in assets) {
         return assets[assetId](x, y);
     } else {

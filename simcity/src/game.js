@@ -8,6 +8,14 @@ export function createGame() {
     let pause = false;
 
     scene.initialize(city);
+    scene.onObjectSelected = (selectedObject) => {
+        console.log("selectedObject:", selectedObject);
+
+        const {x, y} = selectedObject.userData;
+        const tile = city.data[x][y];
+        console.log({tile});
+    }
+    document.addEventListener("mousedown", scene.onMouseDown.bind(scene), false);
 
     const game = {
         update() {
