@@ -18,7 +18,7 @@ export function createCity(size) {
     function update() {
         for (let x = 0; x < size; x++) {
             for (let y = 0; y < size; y++) {
-                data[x][y].update();
+                data[x][y].building?.update();
             }
         }
     }
@@ -35,18 +35,6 @@ const createTile = (x, y) => {
         x, 
         y,
         terrainId: "grass",
-        buildingId: null,
-        update() {
-            if (Math.random() < 0.005) {
-                if (this.buildingId === null) {
-                    this.buildingId = "building-1";
-                } else {
-                    const height = Number(this.buildingId.slice(-1));
-                    if (height < 3) {
-                        this.buildingId = `building-${height + 1}`;
-                    }
-                }
-            }
-        }
+        building: null
     };
 }

@@ -44,20 +44,21 @@ export function createScene() {
         for (let x = 0; x < city.size; x++) {
             for (let y = 0; y < city.size; y++) {
                 // Building geometry
-                const currBuildingId = buildings[x][y]?.userData.id;
-                const newBuildingId = city.data[x][y].buildingId;
+                const tile = city.data[x][y];
+                const existingBuildingMesh = buildings[x][y];
 
                 // Player removes a building, remove it from the scene
-                if (!newBuildingId && currBuildingId) {
-                    scene.remove(buildings[x][y]);
+                if (!tile.building && existingBuildingMesh) {
+                    scene.remove(existingBuildingMesh);
                     buildings[x][y] = null;
                 }
 
                 // Data model has changed, change mesh
-                if (newBuildingId && newBuildingId !== currBuildingId) {
-                    scene.remove(buildings[x][y]);
-                    buildings[x][y] = createAssetInstance(newBuildingId, x, y);
+                if (tile.building && tile.building.dirty) {
+                    scene.remove(existingBuildingMesh);
+                    buildings[x][y] = createAssetInstance(tile.building.id, x, y, tile.building);
                     scene.add(buildings[x][y]);
+                    tile.building.dirty = false;
                 }
             }
         }
@@ -96,6 +97,8 @@ export function createScene() {
         console.log("mouse down", event.button);
         camera.onMouseDown(event);
 
+        if (event.button !== 0) return;
+         
         mouse.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1;
         mouse.y = -(event.clientY / renderer.domElement.clientHeight) * 2 + 1;
 
