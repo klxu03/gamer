@@ -1,9 +1,9 @@
 import { createScene } from "./scene.js";
 import { createCity } from "./city.js";
-import buildingFactory from "./buildings.js";
+import createBuildingFactory from "./buildings.js";
 
 export function createGame() {
-    let activeToolId = "";
+    let activeToolType = "";
     const scene = createScene();
     const city = createCity(16);
 
@@ -17,14 +17,14 @@ export function createGame() {
         const tile = city.data[x][y];
         console.log({tile});
 
-        if (activeToolId === "bulldoze") {
+        if (activeToolType === "bulldoze") {
             // remove existing building
             tile.building = null;
             scene.update(city);
         } else if (!tile.building) {
             // Place building at that location
             console.log("placing building");
-            tile.building = buildingFactory[activeToolId]();
+            tile.building = createBuildingFactory(activeToolType);
             scene.update(city);
         }
     }
@@ -35,9 +35,9 @@ export function createGame() {
             city.update();
             scene.update(city);
         },
-        setActiveToolId(toolId) {
-            console.log("switched toolId from", activeToolId, "to", toolId);
-            activeToolId = toolId;
+        setActiveToolId(toolType) {
+            console.log("switched toolId from", activeToolType, "to", toolType);
+            activeToolType = toolType;
         },
         pause() {
             pause = !pause;

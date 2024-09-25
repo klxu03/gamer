@@ -1,5 +1,18 @@
-const buildingFactory = {
-    "residential": () => {
+export default function createBuildingFactory(buildingType) {
+    switch (buildingType) {
+        case "residential":
+            return createResidentialBuilding();
+        case "commercial":
+            return createCommercialBuilding();
+        case "industrial":
+            return createIndustrialBuilding();
+        case "road":
+            return createRoad();
+        default:
+            console.error(`${buildingType} is not a recognized building type`);
+    }
+
+    function createResidentialBuilding() {
         return {
             type: "residential",
             height: 1,
@@ -15,8 +28,9 @@ const buildingFactory = {
                 }
             }
         }
-    },
-    "commercial": () => {
+    }
+
+    function createCommercialBuilding() {
         return {
             type: "commercial",
             height: 1,
@@ -31,8 +45,9 @@ const buildingFactory = {
                 }
             }
         }
-    },
-    "industrial": () => {
+    }
+
+    function createIndustrialBuilding() {
         return {
             type: "industrial",
             height: 1,
@@ -47,8 +62,9 @@ const buildingFactory = {
                 }
             } 
         }
-    },
-    "road": () => {
+    }
+
+    function createRoad() {
         return {
             type: "road",
             dirty: true,
@@ -58,5 +74,3 @@ const buildingFactory = {
         }
     }
 }
-
-export default buildingFactory;

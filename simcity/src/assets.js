@@ -104,7 +104,6 @@ const assets = createAssetsFactory();
  */
 export function createAssetInstance(assetId, x, y, data) {
     if (assetId in assets) {
-        console.log("createAssetInstance", {data});
         return assets[assetId](x, y, data);
     } else {
         console.warn(`Asset Id ${assetId} is not found`)
