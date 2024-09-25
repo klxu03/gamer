@@ -122,7 +122,14 @@ export function createScene() {
         let intersections = raycaster.intersectObjects(scene.children, false);
 
         if (intersections.length > 0) {
-            if (selectedObject) selectedObject.material.emissive.setHex(0);
+            console.log("intersections", selectedObject, intersections[0].object);
+            if (selectedObject) {
+                try {
+                    selectedObject.material.emissive.setHex(0);
+                } catch (error) {
+                    console.error('An error occurred while setting the emissive color:', error);
+                }
+            } 
             selectedObject = intersections[0].object;
             selectedObject.material.emissive.setHex(0x555555);
 
@@ -133,6 +140,8 @@ export function createScene() {
             } else {
                 console.log("onObjectSelected is not set");
             }
+        } else {
+            console.log("no intersection from left click");
         }
     }
 
