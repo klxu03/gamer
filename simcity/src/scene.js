@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { createCamera } from "./camera.js";
 import { createAssetInstance } from "./assets.js";
+import { globalState } from "./state/stateManager.js";
 
 export function createScene() {
     // Initial scene setup
@@ -123,15 +124,18 @@ export function createScene() {
 
         if (intersections.length > 0) {
             console.log("intersections", selectedObject, intersections[0].object);
-            if (selectedObject) {
-                try {
-                    selectedObject.material.emissive.setHex(0);
-                } catch (error) {
-                    console.error('An error occurred while setting the emissive color:', error);
-                }
-            } 
+            const oldSelectedObject = selectedObject;
             selectedObject = intersections[0].object;
-            selectedObject.material.emissive.setHex(0x555555);
+            if (globalState.getActiveToolType() === "pointer") {
+                if (selectedObject) {
+                    try {
+                        oldSelectedObject.material.emissive.setHex(0);
+                    } catch (error) {
+                        console.error('An error occurred while setting the emissive color:', error);
+                    }
+                } 
+                selectedObject.material.emissive.setHex(0x555555);
+            }
 
             console.log("selected obj:", selectedObject.userData);
 

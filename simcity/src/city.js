@@ -1,3 +1,5 @@
+import { createTile } from "./tile.js";
+
 export function createCity(size) {
     const data = []; // 2D array of size x size of city size
 
@@ -28,13 +30,4 @@ export function createCity(size) {
         data,
         update
     }
-}
-
-const createTile = (x, y) => {
-    return {
-        x, 
-        y,
-        terrainId: "grass",
-        building: null
-    };
 }

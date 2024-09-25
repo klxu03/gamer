@@ -16,6 +16,7 @@
         <div id="root-window">
             <div id="render-target">
                 <div id="ui-toolbar">
+                    <button id="button-pointer" class="ui-button selected" onclick="setActiveToolWindow(event,'pointer')">POINTER</button>
                     <button id="button-bulldoze" class="ui-button" onclick="setActiveToolWindow(event,'bulldoze')">BULLDOZE</button>
                     <button id="button-residential" class="ui-button" onclick="setActiveToolWindow(event, 'residential')">RESIDENTIAL</button>
                     <button id="button-commercial" class="ui-button" onclick="setActiveToolWindow(event, 'commercial')">COMMERCIAL</button>
@@ -31,7 +32,7 @@
                 window.game = createGame();
             };
 
-            let selectedControl = document.getElementById('button-bulldoze');
+            let selectedControl = document.getElementById('button-pointer');
             window.setActiveToolWindow = (event, toolId) => {
                 if (selectedControl) {
                     selectedControl.classList.remove("selected");
@@ -40,7 +41,7 @@
                 selectedControl = event.target;
                 selectedControl.classList.add("selected");
                 
-                window.game.setActiveToolId(toolId);
+                window.game.setActiveToolType(toolId);
             }
         </script>
     </body>render-target   

@@ -1,9 +1,8 @@
 import { createScene } from "./scene.js";
 import { createCity } from "./city.js";
-import createBuildingFactory from "./buildings.js";
+import { globalState } from "./state/stateManager.js";
 
 export function createGame() {
-    let activeToolType = "";
     const scene = createScene();
     const city = createCity(16);
 
@@ -17,14 +16,13 @@ export function createGame() {
         const tile = city.data[x][y];
         console.log({tile});
 
-        if (activeToolType === "bulldoze") {
+        if (globalState.getActiveToolType() === "bulldoze") {
             // remove existing building
-            tile.building = null;
+            tile.removeBuilding();
             scene.update(city);
-        } else if (!tile.building) {
+        } else if (globalState.getActiveToolType() !== "pointer" && !tile.building) {
             // Place building at that location
-            console.log("placing building");
-            tile.building = createBuildingFactory(activeToolType);
+            tile.placeBuilding(globalState.getActiveToolType());
             scene.update(city);
         }
     }
@@ -35,9 +33,8 @@ export function createGame() {
             city.update();
             scene.update(city);
         },
-        setActiveToolId(toolType) {
-            console.log("switched toolId from", activeToolType, "to", toolType);
-            activeToolType = toolType;
+        setActiveToolType(toolType) {
+            globalState.setActiveToolType(toolType);
         },
         pause() {
             pause = !pause;
