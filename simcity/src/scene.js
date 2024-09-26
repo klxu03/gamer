@@ -76,17 +76,19 @@ export function createScene() {
         return intersections[0].object;
     }
 
+    function unselectObject() {
+        try {
+            selectedObject.material.emissive.setHex(0);
+        } catch (ignored) {}
+    }
+
     function handlePointerSelection(event) {
         console.log("handlePointerSelection");
         const newSelectedObject = getNewSelectedObject(event);
 
         if (newSelectedObject) {
             if (globalState.getActiveToolType() === "pointer") {
-                try {
-                    selectedObject.material.emissive.setHex(0);
-                } catch (error) {
-                    console.error("Error setting emissive color:", error);
-                }
+                unselectObject();
             }
 
             newSelectedObject.material.emissive.setHex(0x555555);
@@ -186,7 +188,7 @@ export function createScene() {
         scene.add(...lights);
 
         // const helper = new THREE.CameraHelper(sun.shadow.camera);
-        // scene.add( helper );
+        // scene.add(helper);
     }
 
     function draw() {
@@ -217,6 +219,7 @@ export function createScene() {
         onMouseDown,
         onMouseUp,
         onMouseMove,
+        unselectObject,
         cleanup,
     }
 }

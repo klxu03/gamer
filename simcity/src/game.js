@@ -26,6 +26,7 @@ export function createGame() {
             scene.update(city);
         }
     }
+    // maybe instead of this, just change createScene to getScene and use this state
     document.addEventListener("mousedown", scene.onMouseDown.bind(scene), false);
     document.addEventListener("mousemove", scene.onMouseMove.bind(scene), false);
 
@@ -36,6 +37,7 @@ export function createGame() {
         },
         setActiveToolType(toolType) {
             globalState.setActiveToolType(toolType);
+            scene.unselectObject();
         },
         pause() {
             pause = !pause;
