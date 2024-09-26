@@ -91,10 +91,13 @@ export function createScene() {
                 unselectObject();
             }
 
-            newSelectedObject.material.emissive.setHex(0x555555);
-            console.log("selected obj:", newSelectedObject.userData);
-
-            selectedObject = newSelectedObject;
+            if (selectedObject !== newSelectedObject) {
+                newSelectedObject.material.emissive.setHex(0x555555);
+                console.log("selected obj:", newSelectedObject.userData);
+                selectedObject = newSelectedObject;
+            } else {
+                selectedObject = null;
+            }
         } else {
             console.log("no intersection from left click");
         }
