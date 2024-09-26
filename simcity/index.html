@@ -15,14 +15,42 @@
     <body>
         <div id="root-window">
             <div id="render-target">
+                <div id="title-bar">
+                    <div class="title-bar-left-items title-bar-items">
+                        $1000
+                    </div>
+                    <div class="title-bar-center-items title-bar-items">
+                        <span id="city-name">My City</span>
+                        <span>&nbsp;-&nbsp;</span>
+                        <span id="sim-time">1/1/2023</span>
+                    </div>
+                    <div class="title-bar-right-items title-bar-items">
+                        <img id="population-icon" src="public/icons/person.png">
+                        <span id="population-counter">0</span>
+                    </div>
+                </div>
                 <div id="ui-toolbar">
-                    <button id="button-pointer" class="ui-button selected" onclick="setActiveToolWindow(event,'pointer')">POINTER</button>
-                    <button id="button-bulldoze" class="ui-button" onclick="setActiveToolWindow(event,'bulldoze')">BULLDOZE</button>
-                    <button id="button-residential" class="ui-button" onclick="setActiveToolWindow(event, 'residential')">RESIDENTIAL</button>
-                    <button id="button-commercial" class="ui-button" onclick="setActiveToolWindow(event, 'commercial')">COMMERCIAL</button>
-                    <button id="button-industrial" class="ui-button" onclick="setActiveToolWindow(event, 'industrial')">INDUSTRIAL</button>
-                    <button id="button-road" class="ui-button" onclick="setActiveToolWindow(event, 'road')">ROAD</button>
-                    <button id="button-pause" class="ui-button" onclick="togglePause()">PAUSE</button>
+                    <button id="button-pointer" class="ui-button selected" onclick="setActiveToolWindow(event,'pointer')">
+                        <img class="toolbar-icon" src="public/icons/select-color.png">
+                    </button>
+                    <button id="button-bulldoze" class="ui-button" onclick="setActiveToolWindow(event,'bulldoze')">
+                        <img class="toolbar-icon" src="public/icons/bulldozer-color.png">
+                    </button>
+                    <button id="button-residential" class="ui-button" onclick="setActiveToolWindow(event, 'residential')">
+                        <img class="toolbar-icon" src="public/icons/house-color.png">
+                    </button>
+                    <button id="button-commercial" class="ui-button" onclick="setActiveToolWindow(event, 'commercial')">
+                        <img class="toolbar-icon" src="public/icons/store-color.png">
+                    </button>
+                    <button id="button-industrial" class="ui-button" onclick="setActiveToolWindow(event, 'industrial')">
+                        <img class="toolbar-icon" src="public/icons/factory-color.png">
+                    </button>
+                    <button id="button-road" class="ui-button" onclick="setActiveToolWindow(event, 'road')">
+                        <img class="toolbar-icon" src="public/icons/road-color.png">
+                    </button>
+                    <button id="button-pause" class="ui-button" onclick="togglePause()">
+                        <img class="toolbar-icon" src="public/icons/pause-color.png">
+                    </button>
                 </div>
             </div>
         </div>
