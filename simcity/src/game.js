@@ -13,7 +13,7 @@ export function createGame() {
         console.log("selectedObject:", selectedObject);
 
         const {x, y} = selectedObject.userData;
-        const tile = city.data[x][y];
+        const tile = city.tiles[x][y];
         console.log({tile});
 
         if (globalState.getActiveToolType() === "bulldoze") {
@@ -27,6 +27,7 @@ export function createGame() {
         }
     }
     document.addEventListener("mousedown", scene.onMouseDown.bind(scene), false);
+    document.addEventListener("mousemove", scene.onMouseMove.bind(scene), false);
 
     const game = {
         update() {

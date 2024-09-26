@@ -1,7 +1,8 @@
 import { createTile } from "./tile.js";
 
 export function createCity(size) {
-    const data = []; // 2D array of size x size of city size
+    const tiles = []; // 2D array of size x size of city size
+    const citizens = [];
 
     initialize(); 
 
@@ -13,21 +14,22 @@ export function createCity(size) {
 
                 column.push(tile);
             }
-            data.push(column);
+            tiles.push(column);
         }
     }
 
     function update() {
         for (let x = 0; x < size; x++) {
             for (let y = 0; y < size; y++) {
-                data[x][y].building?.update();
+                tiles[x][y].building?.update(this);
             }
         }
     }
 
     return {
         size,
-        data,
+        tiles,
+        citizens,
         update
     }
 }

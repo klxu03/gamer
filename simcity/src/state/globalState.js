@@ -10,7 +10,6 @@ export default function globalStateManager() {
                 activeToolType = toolType;
             },
             getActiveToolType() {
-                console.log("return activeTool type", activeToolType)
                 return activeToolType;
             }
         }

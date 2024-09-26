@@ -25,6 +25,103 @@ export function createScene() {
     let terrain = [];
     let buildings = [];
 
+    let isDragging = false;
+
+    // Event Handler Functions
+    function onMouseDown(event) {
+        console.log("mouse down", event.button);
+
+        isDragging = true;
+        if (globalState.getActiveToolType() === "pointer") {
+            camera.onMouseDown(event);
+        } else {
+            if (event.button !== 0) return;
+
+            placeBuilding.bind(this)(event);
+        }
+    }
+
+    function onMouseUp(event) {
+        console.log("mouse up", event.button);
+
+        isDragging = false;
+        const activeTool = globalState.getActiveToolType();
+        if (activeTool === "pointer" && event.button === 0) {
+            handlePointerSelection(event);
+        } 
+        camera.onMouseUp(event);
+    }
+
+    function onMouseMove(event) {
+        const activeTool = globalState.getActiveToolType();
+        if (activeTool !== "pointer" && isDragging) {
+            placeBuilding.bind(this)(event);
+        } else if (activeTool === "pointer" && isDragging) {
+            camera.onMouseMove(event);
+        }
+    }
+
+    function getNewSelectedObject(event) {
+        mouse.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1;
+        mouse.y = -(event.clientY / renderer.domElement.clientHeight) * 2 + 1;
+
+        // Update the camera's world matrix 
+        camera.camera.updateMatrixWorld();
+        
+        raycaster.setFromCamera(mouse, camera.camera);
+
+        let intersections = raycaster.intersectObjects(scene.children, false);
+
+        if (intersections.length === 0) return null;
+        return intersections[0].object;
+    }
+
+    function handlePointerSelection(event) {
+        console.log("handlePointerSelection");
+        const newSelectedObject = getNewSelectedObject(event);
+
+        if (newSelectedObject) {
+            if (globalState.getActiveToolType() === "pointer") {
+                try {
+                    selectedObject.material.emissive.setHex(0);
+                } catch (error) {
+                    console.error("Error setting emissive color:", error);
+                }
+            }
+
+            newSelectedObject.material.emissive.setHex(0x555555);
+            console.log("selected obj:", newSelectedObject.userData);
+
+            selectedObject = newSelectedObject;
+        } else {
+            console.log("no intersection from left click");
+        }
+    }
+
+    function placeBuilding(event) {
+        const newSelectedObject = getNewSelectedObject(event);
+
+        if (newSelectedObject) {
+            console.log("new selected object", newSelectedObject);
+
+            // TODO: bound this to the one in onMouseDown
+            if (this.onObjectSelected) {
+                this.onObjectSelected(newSelectedObject);
+            } else {
+                console.log("onObjectSelected is not set");
+            }
+
+            selectedObject = newSelectedObject;
+        } else {
+            console.log("no intersection from left click");
+        }
+    }
+
+    gameWindow.addEventListener("contextmenu", (event) => event.preventDefault(), false);
+    gameWindow.addEventListener("mousedown", onMouseDown);
+    gameWindow.addEventListener("mouseup", onMouseUp);
+    gameWindow.addEventListener("mousemove", onMouseMove);
+
     function initialize(city) {
         scene.clear();
         terrain = [];
@@ -33,7 +130,7 @@ export function createScene() {
         for (let x = 0; x < city.size; x++) {
             const column = [];
             for (let y = 0; y < city.size; y++) {
-                const terrainId = city.data[x][y].terrainId;
+                const terrainId = city.tiles[x][y].terrainId;
                 const mesh = createAssetInstance(terrainId, x, y);
                 scene.add(mesh);
             }
@@ -48,7 +145,7 @@ export function createScene() {
         for (let x = 0; x < city.size; x++) {
             for (let y = 0; y < city.size; y++) {
                 // Building geometry
-                const tile = city.data[x][y];
+                const tile = city.tiles[x][y];
                 const existingBuildingMesh = buildings[x][y];
 
                 // Player removes a building, remove it from the scene
@@ -104,62 +201,12 @@ export function createScene() {
         renderer.setAnimationLoop(null);
     }
 
-    gameWindow.addEventListener("contextmenu", (event) => event.preventDefault(), false);
-
-    function onMouseDown(event) {
-        console.log("mouse down", event.button);
-        camera.onMouseDown(event);
-
-        if (event.button !== 0) return;
-         
-        mouse.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1;
-        mouse.y = -(event.clientY / renderer.domElement.clientHeight) * 2 + 1;
-
-        // Update the camera's world matrix 
-        camera.camera.updateMatrixWorld();
-        
-        raycaster.setFromCamera(mouse, camera.camera);
-
-        let intersections = raycaster.intersectObjects(scene.children, false);
-
-        if (intersections.length > 0) {
-            console.log("intersections", selectedObject, intersections[0].object);
-            const oldSelectedObject = selectedObject;
-            selectedObject = intersections[0].object;
-            if (globalState.getActiveToolType() === "pointer") {
-                if (selectedObject) {
-                    try {
-                        oldSelectedObject.material.emissive.setHex(0);
-                    } catch (error) {
-                        console.error('An error occurred while setting the emissive color:', error);
-                    }
-                } 
-                selectedObject.material.emissive.setHex(0x555555);
-            }
-
-            console.log("selected obj:", selectedObject.userData);
-
-            if (this.onObjectSelected) {
-                this.onObjectSelected(selectedObject);
-            } else {
-                console.log("onObjectSelected is not set");
-            }
-        } else {
-            console.log("no intersection from left click");
-        }
+    function cleanup() {
+        gameWindow.removeEventListener("contextmenu", (event) => event.preventDefault(), false);
+        gameWindow.removeEventListener("mousedown", onMouseDown);
+        gameWindow.removeEventListener("mouseup", onMouseUp);
+        gameWindow.removeEventListener("mousemove", onMouseMove);
     }
-
-    function onMouseUp(event) {
-        console.log("mouse up", event.button);
-        camera.onMouseUp(event);
-    }
-    gameWindow.addEventListener("mouseup", onMouseUp);
-
-    function onMouseMove(event) {
-        console.log("mouse move");
-        camera.onMouseMove(event);
-    }
-    gameWindow.addEventListener("mousemove", onMouseMove);
 
     return {
         onObjectSelected,
@@ -170,11 +217,6 @@ export function createScene() {
         onMouseDown,
         onMouseUp,
         onMouseMove,
-        cleanup: () => {
-            gameWindow.removeEventListener("contextmenu", (event) => event.preventDefault(), false);
-            gameWindow.removeEventListener("mousedown", onMouseDown);
-            gameWindow.removeEventListener("mouseup", onMouseUp);
-            gameWindow.removeEventListener("mousemove", onMouseMove);
-        }
+        cleanup,
     }
 }

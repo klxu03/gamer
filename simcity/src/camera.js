@@ -1,6 +1,7 @@
 import * as THREE from "three";
 
 export function createCamera(gameWindow) {
+    console.log("Creating camera")
     const DEG2RAD = Math.PI / 180;
 
     const Y_AXIS = new THREE.Vector3(0, 1, 0);
@@ -38,6 +39,7 @@ export function createCamera(gameWindow) {
         } else if (event.button === RIGHT_MOUSE_BUTTON) {
             isRightMouseDown = true;
         }
+
     }
 
     function onMouseUp(event) {
@@ -53,6 +55,14 @@ export function createCamera(gameWindow) {
     function onMouseMove(event) {
         const dX = event.clientX - prevMouseX;
         const dY = event.clientY - prevMouseY;
+
+        prevMouseX = event.clientX;
+        prevMouseY = event.clientY;
+
+        // Big moves are probably a jump
+        if (dX > 10 || dY > 10) {
+            return;
+        }
 
         // Handles rotation of the camera
         if (isLeftMouseDown) {
@@ -77,9 +87,6 @@ export function createCamera(gameWindow) {
             cameraRadius = Math.min(MAX_CAMERA_RADIUS, Math.max(MIN_CAMERA_RADIUS, cameraRadius));
             updateCameraPosition();
         }
-
-        prevMouseX = event.clientX;
-        prevMouseY = event.clientY;
     }
 
     function updateCameraPosition() {

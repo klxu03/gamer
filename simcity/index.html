@@ -22,6 +22,7 @@
                     <button id="button-commercial" class="ui-button" onclick="setActiveToolWindow(event, 'commercial')">COMMERCIAL</button>
                     <button id="button-industrial" class="ui-button" onclick="setActiveToolWindow(event, 'industrial')">INDUSTRIAL</button>
                     <button id="button-road" class="ui-button" onclick="setActiveToolWindow(event, 'road')">ROAD</button>
+                    <button id="button-pause" class="ui-button" onclick="togglePause()">PAUSE</button>
                 </div>
             </div>
         </div>
@@ -43,6 +44,17 @@
                 
                 window.game.setActiveToolType(toolId);
             }
+
+            window.togglePause = () => {
+                const pauseButton = document.getElementById('button-pause');
+                window.game.pause();
+
+                if (pauseButton.classList.contains("selected")) {
+                    pauseButton.classList.remove("selected");
+                } else {
+                    pauseButton.classList.add("selected");
+                }
+            }
         </script>
-    </body>render-target   
+    </body> 
 </html>
