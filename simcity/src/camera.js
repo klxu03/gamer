@@ -1,7 +1,6 @@
 import * as THREE from "three";
 
 export function createCamera(gameWindow) {
-    console.log("Creating camera")
     const DEG2RAD = Math.PI / 180;
 
     const Y_AXIS = new THREE.Vector3(0, 1, 0);

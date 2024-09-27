@@ -2,6 +2,7 @@ import * as THREE from "three";
 import { createCamera } from "./camera.js";
 import { createAssetInstance } from "./assets.js";
 import { globalState } from "./state/stateManager.js";
+import City from "./city.js";
 
 export function createScene() {
     // Initial scene setup
@@ -73,17 +74,23 @@ export function createScene() {
         let intersections = raycaster.intersectObjects(scene.children, false);
 
         if (intersections.length === 0) return null;
+
         return intersections[0].object;
     }
 
     function unselectObject() {
         try {
-            selectedObject.material.emissive.setHex(0);
+            if (selectedObject.material instanceof Array) {
+                for (const material of selectedObject.material) {
+                    material.emissive.setHex(0);
+                }
+            } else {
+                selectedObject.material.emissive.setHex(0);
+            }
         } catch (ignored) {}
     }
 
     function handlePointerSelection(event) {
-        console.log("handlePointerSelection");
         const newSelectedObject = getNewSelectedObject(event);
 
         if (newSelectedObject) {
@@ -92,8 +99,16 @@ export function createScene() {
             }
 
             if (selectedObject !== newSelectedObject) {
-                newSelectedObject.material.emissive.setHex(0x555555);
-                console.log("selected obj:", newSelectedObject.userData);
+                window.onSelectedObject(City.getCity().tiles[newSelectedObject.userData.x][newSelectedObject.userData.y].building);
+
+                if (newSelectedObject.material instanceof Array) {
+                    for (const material of newSelectedObject.material) {
+                        material.emissive.setHex(0x555555);
+                    }
+                } else {
+                    newSelectedObject.material.emissive.setHex(0x555555);
+                }
+
                 selectedObject = newSelectedObject;
             } else {
                 selectedObject = null;

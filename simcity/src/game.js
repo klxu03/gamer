@@ -1,10 +1,10 @@
 import { createScene } from "./scene.js";
-import { createCity } from "./city.js";
+import City from "./city.js";
 import { globalState } from "./state/stateManager.js";
 
 export function createGame() {
     const scene = createScene();
-    const city = createCity(16);
+    const city = new City(16);
 
     let pause = false;
 

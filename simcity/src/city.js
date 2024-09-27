@@ -1,12 +1,20 @@
 import { createTile } from "./tile.js";
 
-export function createCity(size) {
-    const tiles = []; // 2D array of size x size of city size
-    const citizens = [];
+class City {
+    tiles = [];
+    citizens = [];
+    size = 0;
 
-    initialize(); 
+    // Ensure singleton City class
+    constructor(size) {
+        if (City.instance) {
+            return City.instance;
+        }
 
-    function initialize() {
+        City.instance = this;
+
+        this.size = size;
+
         for (let x = 0; x < size; x++) {
             const column = [];
             for (let y = 0; y < size; y++) {
@@ -14,22 +22,29 @@ export function createCity(size) {
 
                 column.push(tile);
             }
-            tiles.push(column);
+            this.tiles.push(column);
         }
     }
 
-    function update() {
-        for (let x = 0; x < size; x++) {
-            for (let y = 0; y < size; y++) {
-                tiles[x][y].building?.update(this);
+    /**
+     * Update all the buildings in the city
+     */
+    update() {
+        for (let x = 0; x < this.size; x++) {
+            for (let y = 0; y < this.size; y++) {
+                this.tiles[x][y].building?.update(this);
             }
         }
     }
 
-    return {
-        size,
-        tiles,
-        citizens,
-        update
+    /** Static methods */
+    static getCity() {
+        if (!City.instance) {
+            throw new Error("City instance not initialized");
+        }
+
+        return City.instance;
     }
 }
+
+export default City;
