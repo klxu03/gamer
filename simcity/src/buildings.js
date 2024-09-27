@@ -3,8 +3,6 @@ import { notifyCallbacks } from './callback.js';
 
 export default function createBuildingFactory(buildingType, x, y) {
     switch (buildingType) {
-        case "terrain": 
-            return createTerrain(x, y);
         case "residential":
             return createResidentialBuilding(x, y);
         case "commercial":
@@ -15,20 +13,6 @@ export default function createBuildingFactory(buildingType, x, y) {
             return createRoad(x, y);
         default:
             console.error(`${buildingType} is not a recognized building type`);
-    }
-
-    function createTerrain(x, y) {
-        return {
-            type: "terrain",
-            dirty: true,
-            location: {
-                x, 
-                y
-            },
-            update: function(city) {
-                this.dirty = false;
-            }
-        }
     }
 
     function createResidentialBuilding(x, y) {

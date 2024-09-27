@@ -81,9 +81,11 @@ export function createScene() {
             const selectedEntityData = globalState.getSelectedEntityData();
             if (!selectedEntityData) return; 
 
+            console.log({selectedEntityData})
+            window.onUnselectObject(selectedEntityData);
+
             const selectedBuildingMesh = buildings[selectedEntityData.location.x][selectedEntityData.location.y];
 
-            console.log({selectedEntityData, selectedBuildingMesh});
             if (selectedBuildingMesh.material instanceof Array) {
                 for (const material of selectedBuildingMesh.material) {
                     material.emissive.setHex(0);
@@ -91,6 +93,8 @@ export function createScene() {
             } else {
                 selectedBuildingMesh.material.emissive.setHex(0);
             }
+
+            globalState.setSelectedEntityData(null);
         } catch (ignored) {
         }
     }
@@ -106,6 +110,7 @@ export function createScene() {
 
         const newSelectedEntityData = City.getCity().tiles[newSelectedMeshData.userData.x][newSelectedMeshData.userData.y].building;
         globalState.setSelectedEntityData(newSelectedEntityData);
+        window.onSelectedObject(newSelectedEntityData);
     }
 
     function handlePointerSelection(event) {
@@ -120,7 +125,6 @@ export function createScene() {
             }
 
             unselectObject();
-            window.onSelectedObject(newSelectedEntityData);
 
             if (globalState.getSelectedEntityData() !== newSelectedEntityData) {
                 selectObject(newSelectedMeshData);

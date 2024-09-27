@@ -120,16 +120,18 @@
             unregisterCallback(selectedBuilding.id, window.updateInfoPanel);
           }
 
-          if (newlySelectedBuilding && newlySelectedBuilding !== selectedBuilding) {
+          if (newlySelectedBuilding) {
             // Assign a proxy of the actual building
             selectedBuilding = newlySelectedBuilding;
             registerCallback(selectedBuilding.id, window.updateInfoPanel);
             window.updateInfoPanel(selectedBuilding);
-          } else {
+          }
+        }
+
+        window.onUnselectObject = () => {
             selectedBuilding = {};
             const infoPanel = document.getElementById('info-panel');
             infoPanel.style.visibility = "hidden";
-          }
         }
 
       </script>
