@@ -1,21 +1,37 @@
 import { createCitizen } from './citizens.js';
 import { notifyCallbacks } from './callback.js';
 
-export default function createBuildingFactory(buildingType) {
+export default function createBuildingFactory(buildingType, x, y) {
     switch (buildingType) {
+        case "terrain": 
+            return createTerrain(x, y);
         case "residential":
-            return createResidentialBuilding();
+            return createResidentialBuilding(x, y);
         case "commercial":
-            return createCommercialBuilding();
+            return createCommercialBuilding(x, y);
         case "industrial":
-            return createIndustrialBuilding();
+            return createIndustrialBuilding(x, y);
         case "road":
-            return createRoad();
+            return createRoad(x, y);
         default:
             console.error(`${buildingType} is not a recognized building type`);
     }
 
-    function createResidentialBuilding() {
+    function createTerrain(x, y) {
+        return {
+            type: "terrain",
+            dirty: true,
+            location: {
+                x, 
+                y
+            },
+            update: function(city) {
+                this.dirty = false;
+            }
+        }
+    }
+
+    function createResidentialBuilding(x, y) {
         return {
             id: crypto.randomUUID(),
             type: "residential",
@@ -23,6 +39,10 @@ export default function createBuildingFactory(buildingType) {
             dirty: true,
             residents: [],
             maxResidents: 4,
+            location: {
+                x, 
+                y
+            },
             update: function(city) {
                 if (this.residents.length < this.maxResidents) {
                     const resident = createCitizen(this);
@@ -43,12 +63,16 @@ export default function createBuildingFactory(buildingType) {
         };
     }
 
-    function createCommercialBuilding() {
+    function createCommercialBuilding(x, y) {
         return {
             id: crypto.randomUUID(),
             type: "commercial",
             height: 1,
             dirty: true,
+            location: {
+                x, 
+                y
+            },
             update: function(city) {
                 this.dirty = false;
                 if (Math.random() < 0.5) {
@@ -61,12 +85,16 @@ export default function createBuildingFactory(buildingType) {
         }
     }
 
-    function createIndustrialBuilding() {
+    function createIndustrialBuilding(x, y) {
         return {
             id: crypto.randomUUID(),
             type: "industrial",
             height: 1,
             dirty: true,
+            location: {
+                x, 
+                y
+            },
             update: function(city) {
                 this.dirty = false;
                 if (Math.random() < 0.5) {
@@ -79,10 +107,14 @@ export default function createBuildingFactory(buildingType) {
         }
     }
 
-    function createRoad() {
+    function createRoad(x, y) {
         return {
             type: "road",
             dirty: true,
+            location: {
+                x, 
+                y
+            },
             update: function() {
                 this.dirty = false;
             }

@@ -3,6 +3,12 @@ export default function globalStateManager() {
 
     function createInstance() {
         let activeToolType = "pointer";
+        
+        /**
+         * EntityData is the logic underlying the data in buildings.js
+         * MeshData is the direct mesh and asset data
+         */
+        let selectedEntityData = null;
 
         return {
             setActiveToolType(toolType) {
@@ -11,6 +17,12 @@ export default function globalStateManager() {
             },
             getActiveToolType() {
                 return activeToolType;
+            },
+            setSelectedEntityData(obj) {
+                selectedEntityData = obj;
+            },
+            getSelectedEntityData() {
+                return selectedEntityData;
             }
         }
     }

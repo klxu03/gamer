@@ -13,7 +13,7 @@ export function createTile(x, y) {
             this.building = null;
         },
         placeBuilding(buildingType) {
-            this.building = createBuildingFactory(buildingType);
+            this.building = createBuildingFactory(buildingType, x, y);
         }
     };
 }

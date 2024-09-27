@@ -100,7 +100,7 @@
           infoPanel.style.visibility = "visible";
           infoPanel.innerHTML = '<div class="info-heading">Building</div>';
 
-          const sensitiveKeys = ["update", "id"]
+          const sensitiveKeys = ["update", "id", "dirty"]
 
           for (const [key, value] of Object.entries(selectedBuilding)) {
             if (sensitiveKeys.includes(key)) continue;

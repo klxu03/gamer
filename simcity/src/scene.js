@@ -21,9 +21,7 @@ export function createScene() {
 
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
-    let selectedObject = null;
 
-    let terrain = [];
     let buildings = [];
 
     let isDragging = false;
@@ -80,37 +78,54 @@ export function createScene() {
 
     function unselectObject() {
         try {
-            if (selectedObject.material instanceof Array) {
-                for (const material of selectedObject.material) {
+            const selectedEntityData = globalState.getSelectedEntityData();
+            if (!selectedEntityData) return; 
+
+            const selectedBuildingMesh = buildings[selectedEntityData.location.x][selectedEntityData.location.y];
+
+            console.log({selectedEntityData, selectedBuildingMesh});
+            if (selectedBuildingMesh.material instanceof Array) {
+                for (const material of selectedBuildingMesh.material) {
                     material.emissive.setHex(0);
                 }
             } else {
-                selectedObject.material.emissive.setHex(0);
+                selectedBuildingMesh.material.emissive.setHex(0);
             }
-        } catch (ignored) {}
+        } catch (ignored) {
+        }
+    }
+
+    function selectObject(newSelectedMeshData) {
+        if (newSelectedMeshData.material instanceof Array) {
+            for (const material of newSelectedMeshData.material) {
+                material.emissive.setHex(0x555555);
+            }
+        } else {
+            newSelectedMeshData.material.emissive.setHex(0x555555);
+        }
+
+        const newSelectedEntityData = City.getCity().tiles[newSelectedMeshData.userData.x][newSelectedMeshData.userData.y].building;
+        globalState.setSelectedEntityData(newSelectedEntityData);
     }
 
     function handlePointerSelection(event) {
-        const newSelectedObject = getNewSelectedObject(event);
+        const newSelectedMeshData = getNewSelectedObject(event);
 
-        if (newSelectedObject) {
-            if (globalState.getActiveToolType() === "pointer") {
-                unselectObject();
+        if (newSelectedMeshData) {
+            const newSelectedEntityData = City.getCity().tiles[newSelectedMeshData.userData.x][newSelectedMeshData.userData.y].building;
+
+            if (!newSelectedEntityData) {
+                console.log("selected entity is not a building")
+                return;
             }
 
-            window.onSelectedObject(City.getCity().tiles[newSelectedObject.userData.x][newSelectedObject.userData.y].building);
-            if (selectedObject !== newSelectedObject) {
-                if (newSelectedObject.material instanceof Array) {
-                    for (const material of newSelectedObject.material) {
-                        material.emissive.setHex(0x555555);
-                    }
-                } else {
-                    newSelectedObject.material.emissive.setHex(0x555555);
-                }
+            unselectObject();
+            window.onSelectedObject(newSelectedEntityData);
 
-                selectedObject = newSelectedObject;
+            if (globalState.getSelectedEntityData() !== newSelectedEntityData) {
+                selectObject(newSelectedMeshData);
             } else {
-                selectedObject = null;
+                globalState.setSelectedEntityData(null);
             }
         } else {
             console.log("no intersection from left click");
@@ -130,7 +145,8 @@ export function createScene() {
                 console.log("onObjectSelected is not set");
             }
 
-            selectedObject = newSelectedObject;
+            // TODO set it to the building state, not mesh
+            globalState.setSelectedEntityData(newSelectedObject);
         } else {
             console.log("no intersection from left click");
         }
@@ -143,18 +159,15 @@ export function createScene() {
 
     function initialize(city) {
         scene.clear();
-        terrain = [];
         buildings = [];
 
         for (let x = 0; x < city.size; x++) {
-            const column = [];
+            buildings.push([...Array(city.size)]);
             for (let y = 0; y < city.size; y++) {
                 const terrainId = city.tiles[x][y].terrainId;
                 const mesh = createAssetInstance(terrainId, x, y);
                 scene.add(mesh);
             }
-            terrain.push(column);
-            buildings.push([...Array(city.size)]);
         }
 
         setupLights();
@@ -175,11 +188,20 @@ export function createScene() {
 
                 // Data model has changed, change mesh
                 if (tile.building && tile.building.dirty) {
+                    const updatingSelectedObject = tile.building === globalState.getSelectedEntityData();
+                    console.log({updatingSelectedObject})
+
                     scene.remove(existingBuildingMesh);
                     buildings[x][y] = createAssetInstance(tile.building.type, x, y, tile.building);
                     scene.add(buildings[x][y]);
                     tile.building.dirty = false;
-                    notifyCallbacks(tile.building);
+
+                    if (updatingSelectedObject) {
+                        selectObject(buildings[x][y]);
+                        
+                        // TODO: decide if we only want to notify callback if updating a selected entity building or not
+                        notifyCallbacks(tile.building);
+                    }
                 }
             }
         }
