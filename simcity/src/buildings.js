@@ -1,4 +1,5 @@
 import { createCitizen } from './citizens.js';
+import { notifyCallbacks } from './callback.js';
 
 export default function createBuildingFactory(buildingType) {
     switch (buildingType) {
@@ -28,6 +29,7 @@ export default function createBuildingFactory(buildingType) {
                     this.residents.push(resident);
                     city.citizens.push(resident);
                     console.log(resident, `moved into the ${this.type}`);
+                    notifyCallbacks(this);
                 }
 
                 this.dirty = false;

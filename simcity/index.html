@@ -63,6 +63,8 @@
 
       <script type="module">
         import { createGame } from './src/game.js';
+        import { registerCallback, unregisterCallback } from './src/callback.js';
+
         window.onload = () => {
           window.game = createGame();
         };
@@ -114,11 +116,17 @@
         window.onSelectedObject = (newlySelectedBuilding) => {
           console.log("newlySelectedBuilding from HTML", newlySelectedBuilding);
 
-          if (newlySelectedBuilding) {
+          if (selectedBuilding) {
+            unregisterCallback(selectedBuilding.id, window.updateInfoPanel);
+          }
+
+          if (newlySelectedBuilding && newlySelectedBuilding !== selectedBuilding) {
             // Assign a proxy of the actual building
             selectedBuilding = newlySelectedBuilding;
+            registerCallback(selectedBuilding.id, window.updateInfoPanel);
             window.updateInfoPanel(selectedBuilding);
           } else {
+            selectedBuilding = {};
             const infoPanel = document.getElementById('info-panel');
             infoPanel.style.visibility = "hidden";
           }

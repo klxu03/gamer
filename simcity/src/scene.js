@@ -2,6 +2,7 @@ import * as THREE from "three";
 import { createCamera } from "./camera.js";
 import { createAssetInstance } from "./assets.js";
 import { globalState } from "./state/stateManager.js";
+import { notifyCallbacks } from "./callback.js";
 import City from "./city.js";
 
 export function createScene() {
@@ -21,7 +22,6 @@ export function createScene() {
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
     let selectedObject = null;
-    let onObjectSelected = null;
 
     let terrain = [];
     let buildings = [];
@@ -98,9 +98,8 @@ export function createScene() {
                 unselectObject();
             }
 
+            window.onSelectedObject(City.getCity().tiles[newSelectedObject.userData.x][newSelectedObject.userData.y].building);
             if (selectedObject !== newSelectedObject) {
-                window.onSelectedObject(City.getCity().tiles[newSelectedObject.userData.x][newSelectedObject.userData.y].building);
-
                 if (newSelectedObject.material instanceof Array) {
                     for (const material of newSelectedObject.material) {
                         material.emissive.setHex(0x555555);
@@ -124,7 +123,7 @@ export function createScene() {
         if (newSelectedObject) {
             console.log("new selected object", newSelectedObject);
 
-            // TODO: bound this to the one in onMouseDown
+            // this is bound to scene from onMouseDown up to game.js 
             if (this.onObjectSelected) {
                 this.onObjectSelected(newSelectedObject);
             } else {
@@ -180,6 +179,7 @@ export function createScene() {
                     buildings[x][y] = createAssetInstance(tile.building.type, x, y, tile.building);
                     scene.add(buildings[x][y]);
                     tile.building.dirty = false;
+                    notifyCallbacks(tile.building);
                 }
             }
         }
@@ -229,7 +229,6 @@ export function createScene() {
     }
 
     return {
-        onObjectSelected,
         initialize,
         update,
         start,
