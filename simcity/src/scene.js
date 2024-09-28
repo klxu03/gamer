@@ -126,13 +126,13 @@ export function createScene() {
                 return;
             }
 
+            const needToSelectNewObject = globalState.getSelectedEntityData() !== newSelectedEntityData;
+
             unselectObject();
 
-            if (globalState.getSelectedEntityData() !== newSelectedEntityData) {
+            if (needToSelectNewObject) {
                 selectObject(newSelectedMeshData);
-            } else {
-                globalState.setSelectedEntityData(null);
-            }
+            } 
         } else {
             console.log("no intersection from left click");
         }
