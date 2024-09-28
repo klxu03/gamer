@@ -10,6 +10,14 @@ export default function globalStateManager() {
          */
         let selectedEntityData = null;
 
+        /**
+         * -1 means nothing is down
+         * 0 means left mouse button
+         * 1 means middle mouse button
+         * 2 means right mouse button
+         */
+        let mouseDown = -1;
+
         return {
             setActiveToolType(toolType) {
                 console.log("switching activeToolType from", activeToolType, "to", toolType);
@@ -24,7 +32,15 @@ export default function globalStateManager() {
             },
             getSelectedEntityData() {
                 return selectedEntityData;
-            }
+            },
+            setMouseDown(mouseEvent) {
+                if (mouseEvent === -1) mouseDown = -1;
+                if (mouseDown !== -1) return;
+                mouseDown = mouseEvent;
+            },
+            getMouseDown() {
+                return mouseDown;
+            },
         }
     }
         

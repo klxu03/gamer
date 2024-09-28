@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { globalState } from "./state/stateManager.js";
 
 export function createCamera(gameWindow) {
     const DEG2RAD = Math.PI / 180;
@@ -8,9 +9,6 @@ export function createCamera(gameWindow) {
     const LEFT_MOUSE_BUTTON = 0;
     const MIDDLE_MOUSE_BUTTON = 1;
     const RIGHT_MOUSE_BUTTON = 2;
-    let isLeftMouseDown = false;
-    let isRightMouseDown = false;
-    let isMiddleMouseDown = false;
 
     const MIN_CAMERA_RADIUS = 10;
     const MAX_CAMERA_RADIUS = 20;
@@ -30,27 +28,6 @@ export function createCamera(gameWindow) {
     let prevMouseY = 0;
     updateCameraPosition();
 
-    function onMouseDown(event) {
-        if (event.button === LEFT_MOUSE_BUTTON) {
-            isLeftMouseDown = true;
-        } else if (event.button === MIDDLE_MOUSE_BUTTON) {  
-            isMiddleMouseDown = true;
-        } else if (event.button === RIGHT_MOUSE_BUTTON) {
-            isRightMouseDown = true;
-        }
-
-    }
-
-    function onMouseUp(event) {
-        if (event.button === LEFT_MOUSE_BUTTON) {
-            isLeftMouseDown = false;
-        } else if (event.button === MIDDLE_MOUSE_BUTTON) {  
-            isMiddleMouseDown = false;
-        } else if (event.button === RIGHT_MOUSE_BUTTON) {
-            isRightMouseDown = false;
-        } 
-    }
-
     function onMouseMove(event) {
         const dX = event.clientX - prevMouseX;
         const dY = event.clientY - prevMouseY;
@@ -64,7 +41,7 @@ export function createCamera(gameWindow) {
         }
 
         // Handles rotation of the camera
-        if (isLeftMouseDown) {
+        if (globalState.getMouseDown() === LEFT_MOUSE_BUTTON) {
             cameraAzimuth += -dX * ROTATION_SENSITIVITY;
             cameraElevation += dY * ROTATION_SENSITIVITY;
             cameraElevation = Math.min(MAX_CAMERA_ELEVATION, Math.max(MIN_CAMERA_ELEVATION, cameraElevation));
@@ -72,7 +49,7 @@ export function createCamera(gameWindow) {
         }
 
         // Handles panning of the camera
-        if (isMiddleMouseDown) {
+        if (globalState.getMouseDown() === MIDDLE_MOUSE_BUTTON) {
             const forward = new THREE.Vector3(0, 0, 1).applyAxisAngle(Y_AXIS, cameraAzimuth * DEG2RAD);
             const left = new THREE.Vector3(1, 0, 0).applyAxisAngle(Y_AXIS, cameraAzimuth * DEG2RAD);
             cameraOrigin.add(forward.multiplyScalar(dY * -PAN_SENSITIVITY));
@@ -81,7 +58,7 @@ export function createCamera(gameWindow) {
         }
 
         // Handles the zoom of the camera
-        if (isRightMouseDown) {
+        if (globalState.getMouseDown() === RIGHT_MOUSE_BUTTON) {
             cameraRadius += dY * ZOOM_SENSITIVITY;
             cameraRadius = Math.min(MAX_CAMERA_RADIUS, Math.max(MIN_CAMERA_RADIUS, cameraRadius));
             updateCameraPosition();
@@ -99,8 +76,6 @@ export function createCamera(gameWindow) {
 
     return {
         camera,
-        onMouseDown,
-        onMouseUp,
         onMouseMove
     }
 }

@@ -24,38 +24,39 @@ export function createScene() {
 
     let buildings = [];
 
-    let isDragging = false;
-
     // Event Handler Functions
     function onMouseDown(event) {
         console.log("mouse down", event.button);
+        globalState.setMouseDown(event.button);
 
-        isDragging = true;
-        if (globalState.getActiveToolType() === "pointer") {
-            camera.onMouseDown(event);
-        } else {
-            if (event.button !== 0) return;
+        if (event.button !== 0) return;
+        console.log("event.button", event.button);
 
-            placeBuilding.bind(this)(event);
-        }
+        placeBuilding.bind(this)(event);
     }
 
     function onMouseUp(event) {
         console.log("mouse up", event.button);
 
-        isDragging = false;
         const activeTool = globalState.getActiveToolType();
-        if (activeTool === "pointer" && event.button === 0) {
+        if (activeTool === "pointer" && globalState.getMouseDown() === 0) {
             handlePointerSelection(event);
         } 
-        camera.onMouseUp(event);
+        globalState.setMouseDown(-1);
     }
 
     function onMouseMove(event) {
+        if (globalState.getMouseDown() === -1) return;
+
         const activeTool = globalState.getActiveToolType();
-        if (activeTool !== "pointer" && isDragging) {
-            placeBuilding.bind(this)(event);
-        } else if (activeTool === "pointer" && isDragging) {
+
+        if (globalState.getMouseDown() === 0) {
+            if (activeTool === "pointer") {
+                camera.onMouseMove(event);
+            } else {
+                placeBuilding.bind(this)(event);
+            }
+        } else {
             camera.onMouseMove(event);
         }
     }
