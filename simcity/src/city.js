@@ -35,6 +35,10 @@ class City {
                 this.tiles[x][y].building?.update(this);
             }
         }
+
+        for (const citizen of this.citizens) {
+            citizen.update(this);
+        }
     }
 
     /** Static methods */

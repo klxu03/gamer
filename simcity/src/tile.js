@@ -10,6 +10,7 @@ export function createTile(x, y) {
 
         /* METHODS */
         removeBuilding() {
+            this.building.dispose();
             this.building = null;
         },
         placeBuilding(buildingType) {

@@ -113,16 +113,7 @@
               `
 
               for (const person of value) {
-                infoPanel.innerHTML += `
-                  <li class="info-citizen">
-                    <span class="info-citizen-name">${person.name}</span>
-                    <br>
-                    <span>
-                      <img class="info-citizen-icon" src="public/icons/calendar.png">
-                      ${person.age}
-                    </span>
-                  </li>
-                `
+                infoPanel.innerHTML += person.toHTML(); 
               }
               infoPanel.innerHTML += "</ul>"
 

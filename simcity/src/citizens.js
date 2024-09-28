@@ -10,15 +10,56 @@ const createCitizen = (house) => {
         return `${randomFirstName} ${randomLastName}`;
     };
 
+    function findJob(city) {
+
+    }
+
     return {
         /* PROPERTIES */
         name: generateRandomName(),
         age: Math.floor(Math.random() * 60) + 20,
         house,
+        isEmployed: false,
+        stateCounter: 0,
+        job: null,
 
         /* METHODS */
         update(city) {
-            // TODO: Implement
+            if (this.isEmployed) {
+                if (!this.job) {
+                    this.isEmployed = false;
+                    this.stateCounter = 0;
+                }
+            } else {
+
+                if (this.job) {
+                    this.isEmployed = true;
+                    this.stateCounter = 0;
+                }
+            }
+
+            this.stateCounter++;
+        },
+
+        toHTML() {
+            const jobStatus = this.isEmployed ? this.job : "Unemployed"; 
+
+            return `
+                  <li class="info-citizen">
+                    <span class="info-citizen-name">${this.name}</span>
+                    <br>
+                    <span class="info-citizen-details">
+                      <span>
+                        <img class="info-citizen-icon" src="public/icons/calendar.png">
+                        ${this.age}
+                      </span>
+                      <span>
+                        <img class="info-citizen-icon" src="public/icons/job.png">
+                        ${jobStatus}
+                      </span>
+                    </span>
+                  </li>
+                `
         }
     }
 }

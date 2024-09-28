@@ -66,6 +66,10 @@ export default function createBuildingFactory(buildingType, x, y) {
                         this.dirty = true;
                     }
                 }
+            },
+            // Clean up some state before the building is removed
+            dispose() {
+                // delete all the workers in here
             }
         }
     }
