@@ -10,9 +10,9 @@ export function createCamera(gameWindow) {
     const MIDDLE_MOUSE_BUTTON = 1;
     const RIGHT_MOUSE_BUTTON = 2;
 
-    const MIN_CAMERA_RADIUS = 10;
+    const MIN_CAMERA_RADIUS = 5;
     const MAX_CAMERA_RADIUS = 20;
-    const MIN_CAMERA_ELEVATION = 30;
+    const MIN_CAMERA_ELEVATION = 10;
     const MAX_CAMERA_ELEVATION = 90;
 
     const ROTATION_SENSITIVITY = 0.5;
@@ -36,7 +36,7 @@ export function createCamera(gameWindow) {
         prevMouseY = event.clientY;
 
         // Big moves are probably a jump
-        if (dX > 10 || dY > 10) {
+        if (Math.abs(dX) > 10 || Math.abs(dY) > 10) {
             return;
         }
 
