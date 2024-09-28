@@ -77,6 +77,7 @@ export function createScene() {
     }
 
     function unselectObject() {
+        console.log("unselecting object")
         try {
             const selectedEntityData = globalState.getSelectedEntityData();
             if (!selectedEntityData) return; 
@@ -137,20 +138,15 @@ export function createScene() {
     }
 
     function placeBuilding(event) {
-        const newSelectedObject = getNewSelectedObject(event);
+        const newSelectedMeshData = getNewSelectedObject(event);
 
-        if (newSelectedObject) {
-            console.log("new selected object", newSelectedObject);
-
+        if (newSelectedMeshData) {
             // this is bound to scene from onMouseDown up to game.js 
             if (this.onObjectSelected) {
-                this.onObjectSelected(newSelectedObject);
+                this.onObjectSelected(newSelectedMeshData);
             } else {
                 console.log("onObjectSelected is not set");
             }
-
-            // TODO set it to the building state, not mesh
-            globalState.setSelectedEntityData(newSelectedObject);
         } else {
             console.log("no intersection from left click");
         }
@@ -193,7 +189,6 @@ export function createScene() {
                 // Data model has changed, change mesh
                 if (tile.building && tile.building.dirty) {
                     const updatingSelectedObject = tile.building === globalState.getSelectedEntityData();
-                    console.log({updatingSelectedObject})
 
                     scene.remove(existingBuildingMesh);
                     buildings[x][y] = createAssetInstance(tile.building.type, x, y, tile.building);

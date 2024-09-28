@@ -84,9 +84,9 @@ const createZoneMesh = (x, y,  data) => {
     ];
     const mesh = new THREE.Mesh(cube, materialArray);
     mesh.userData = {x, y};
-    mesh.scale.set(0.8, (data.height - 0.95) / 2, 0.8);
-    mesh.material.forEach(material => material.map?.repeat.set(1, data.height - 1));
-    mesh.position.set(x, (data.height - 0.95) / 4, y);
+    mesh.scale.set(0.8, (data.level - 0.95) / 2, 0.8);
+    mesh.material.forEach(material => material.map?.repeat.set(1, data.level - 1));
+    mesh.position.set(x, (data.level - 0.95) / 4, y);
     mesh.castShadow = true;
     mesh.receiveShadow = true;
     return mesh;

@@ -19,27 +19,27 @@ export default function createBuildingFactory(buildingType, x, y) {
         return {
             id: crypto.randomUUID(),
             type: "residential",
-            height: 1,
+            level: 1,
+            maxLevel: 5,
             dirty: true,
-            residents: [],
-            maxResidents: 4,
+            maxOccupancy: 4,
             location: {
                 x, 
                 y
             },
+            residents: [],
             update: function(city) {
-                if (this.residents.length < this.maxResidents) {
+                if (this.residents.length < this.maxOccupancy) {
                     const resident = createCitizen(this);
                     this.residents.push(resident);
                     city.citizens.push(resident);
-                    console.log(resident, `moved into the ${this.type}`);
                     notifyCallbacks(this);
                 }
 
                 this.dirty = false;
                 if (Math.random() < 0.5) {
-                    if (this.height < 5) {
-                        this.height++;
+                    if (this.level < this.maxLevel) {
+                        this.level++;
                         this.dirty = true;
                     }
                 }
@@ -51,7 +51,8 @@ export default function createBuildingFactory(buildingType, x, y) {
         return {
             id: crypto.randomUUID(),
             type: "commercial",
-            height: 1,
+            level: 1,
+            maxLevel: 5,
             dirty: true,
             location: {
                 x, 
@@ -60,8 +61,8 @@ export default function createBuildingFactory(buildingType, x, y) {
             update: function(city) {
                 this.dirty = false;
                 if (Math.random() < 0.5) {
-                    if (this.height < 5) {
-                        this.height++;
+                    if (this.level < this.maxLevel) {
+                        this.level++;
                         this.dirty = true;
                     }
                 }
@@ -73,7 +74,8 @@ export default function createBuildingFactory(buildingType, x, y) {
         return {
             id: crypto.randomUUID(),
             type: "industrial",
-            height: 1,
+            level: 1,
+            maxLevel: 5,
             dirty: true,
             location: {
                 x, 
@@ -82,8 +84,8 @@ export default function createBuildingFactory(buildingType, x, y) {
             update: function(city) {
                 this.dirty = false;
                 if (Math.random() < 0.5) {
-                    if (this.height < 5) {
-                        this.height++;
+                    if (this.level < this.maxLevel) {
+                        this.level++;
                         this.dirty = true;
                     }
                 }

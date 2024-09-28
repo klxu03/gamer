@@ -19,6 +19,7 @@ export default function globalStateManager() {
                 return activeToolType;
             },
             setSelectedEntityData(obj) {
+                console.log("setting selectedEntityData", obj);
                 selectedEntityData = obj;
             },
             getSelectedEntityData() {

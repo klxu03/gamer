@@ -10,7 +10,7 @@ export function createGame() {
 
     scene.initialize(city);
     scene.onObjectSelected = (selectedObject) => {
-        console.log("selectedObject:", selectedObject);
+        console.log("selectedObject being placed onObjectSelected:", selectedObject);
 
         const {x, y} = selectedObject.userData;
         const tile = city.tiles[x][y];

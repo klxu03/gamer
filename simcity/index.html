@@ -100,16 +100,39 @@
           infoPanel.style.visibility = "visible";
           infoPanel.innerHTML = '<div class="info-heading">Building</div>';
 
-          const sensitiveKeys = ["update", "id", "dirty"]
+          const sensitiveKeys = ["update", "id", "dirty", "location", "maxLevel", "maxOccupancy"]
 
           for (const [key, value] of Object.entries(selectedBuilding)) {
             if (sensitiveKeys.includes(key)) continue;
 
-            infoPanel.innerHTML += `
-                            <span class="info-label">${key}</span>
-                            <span class="info-value">${value}</span>
-                            <br>
-                        `;
+            if (value instanceof Array) {
+              console.log("key", key, "is an array")
+              infoPanel.innerHTML += `
+                <div class="info-heading">${key} (${value.length}/${selectedBuilding.maxOccupancy})</div>
+                <ul class="info-citizen-list">
+              `
+
+              for (const person of value) {
+                infoPanel.innerHTML += `
+                  <li class="info-citizen">
+                    <span class="info-citizen-name">${person.name}</span>
+                    <br>
+                    <span>
+                      <img class="info-citizen-icon" src="public/icons/calendar.png">
+                      ${person.age}
+                    </span>
+                  </li>
+                `
+              }
+              infoPanel.innerHTML += "</ul>"
+
+            } else {
+              infoPanel.innerHTML += `
+                              <span class="info-label">${key}</span>
+                              <span class="info-value">${value}</span>
+                              <br>
+                          `;
+            }
           }
         }
 
