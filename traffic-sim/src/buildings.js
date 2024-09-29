@@ -43,6 +43,9 @@ export default function createBuildingFactory(buildingType, x, y) {
                         this.dirty = true;
                     }
                 }
+            },
+            dispose() {
+
             }
         };
     }
@@ -93,7 +96,10 @@ export default function createBuildingFactory(buildingType, x, y) {
                         this.dirty = true;
                     }
                 }
-            } 
+            },
+            dispose() {
+
+            }
         }
     }
 
@@ -107,6 +113,9 @@ export default function createBuildingFactory(buildingType, x, y) {
             },
             update: function() {
                 this.dirty = false;
+            },
+            dispose() {
+                
             }
         }
     }

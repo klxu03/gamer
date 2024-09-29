@@ -1,7 +1,26 @@
 import * as THREE from "three";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js"
 
 const cube = new THREE.BoxGeometry(1, 1, 1);
 const loader = new THREE.TextureLoader();
+const gltfLoader = new GLTFLoader();
+
+const loadModel = (x, y) => {
+    gltfLoader.load("public/models/construction-small.glf", (glb) => {
+        const mesh = glb.scene;
+        mesh.scale.set(0.01, 0.01, 0.01);
+        mesh.traverse((child) => {
+            if (child.mesh) {
+                child.castShadow = true;
+                child.receiveShadow = true;
+            }
+        });
+
+        mesh.userData = {x, y};
+
+        return mesh;
+    })
+}
 
 const loadTexture = (url) => {
     const tex = loader.load(url);
@@ -17,8 +36,8 @@ const loadTexture = (url) => {
 }
 
 const textures = {
-    "grass": loadTexture("../public/textures/grass.png"),
-    "residential": loadTexture("../public/textures/residential.png"),
+    "grass": loadTexture("/public/textures/grass.png"),
+    "residential": loadTexture("/public/textures/residential.png"),
     "commercial": loadTexture("public/textures/commercial.png"),
     "industrial": loadTexture("public/textures/industrial.png"),
 }
@@ -55,6 +74,9 @@ const createAssetsFactory = () => {
         "industrial": (x, y, data) => {
             return createZoneMesh(x, y, data);
         },
+        "construction": (x, y, data) => {
+            return loadModel(x, y);
+        },
         "road": (x, y) => {
             const material = new THREE.MeshLambertMaterial({ color: 0x444440 });
             const mesh = new THREE.Mesh(cube, material);
@@ -69,7 +91,7 @@ const createAssetsFactory = () => {
     return assets;
 }
 
-const createZoneMesh = (x, y,  data) => {
+const createZoneMesh = (x, y, data) => {
     const textureName = data.type;
 
     const topMaterial = getTopMaterial();
