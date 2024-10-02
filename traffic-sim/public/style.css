@@ -1,0 +1,12 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    /* font-family: Bebas-Regular, sans-serif; */
+  
+    background: linear-gradient(0deg, #3a5177, #81b1e0);
+}
+
+#render-target {
+    position: relative;
+    height: 100%;
+}
