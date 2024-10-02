@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="./public/main.css">
+  <script type="importmap">
+            {
+              "imports": {
+                "three": "https://cdn.jsdelivr.net/npm/three/build/three.module.js",
+                "three/addons/": "https://cdn.jsdelivr.net/npm/three/examples/jsm/"
+              }
+            }
+          </script>
+</head>
+
+<body>
+  <div id="root-window">
+    <div id="render-target">
+      <div>
+        <div id="title-bar">
+          <div class="title-bar-left-items title-bar-items">
+            $1000
+          </div>
+          <div class="title-bar-center-items title-bar-items">
+            <span id="city-name">My City</span>
+            <span>&nbsp;-&nbsp;</span>
+            <span id="sim-time">1/1/2023</span>
+          </div>
+          <div class="title-bar-right-items title-bar-items">
+            <img id="population-icon" src="public/icons/person.png">
+            <span id="population-counter">0</span>
+          </div>
+        </div>
+        <div>
+          <div id="ui-toolbar">
+            <button id="button-pointer" class="ui-button selected" onclick="setActiveToolWindow(event,'pointer')">
+              <img class="toolbar-icon" src="public/icons/select-color.png">
+            </button>
+            <button id="button-bulldoze" class="ui-button" onclick="setActiveToolWindow(event,'bulldoze')">
+              <img class="toolbar-icon" src="public/icons/bulldozer-color.png">
+            </button>
+            <button id="button-residential" class="ui-button" onclick="setActiveToolWindow(event, 'residential')">
+              <img class="toolbar-icon" src="public/icons/house-color.png">
+            </button>
+            <button id="button-commercial" class="ui-button" onclick="setActiveToolWindow(event, 'commercial')">
+              <img class="toolbar-icon" src="public/icons/store-color.png">
+            </button>
+            <button id="button-industrial" class="ui-button" onclick="setActiveToolWindow(event, 'industrial')">
+              <img class="toolbar-icon" src="public/icons/factory-color.png">
+            </button>
+            <button id="button-road" class="ui-button" onclick="setActiveToolWindow(event, 'road')">
+              <img class="toolbar-icon" src="public/icons/road-color.png">
+            </button>
+            <button id="button-pause" class="ui-button" onclick="togglePause()">
+              <img class="toolbar-icon" src="public/icons/pause-color.png">
+            </button>
+          </div>
+          <div id="info-panel" class="container" style="visibility: hidden;">
+          </div>
+        </div>
+      </div>
+
+      <script type="module">
+        import { createGame } from './src/game.js';
+        import { registerCallback, unregisterCallback } from './src/callback.js';
+
+        window.onload = () => {
+          window.game = createGame();
+        };
+
+        let selectedControl = document.getElementById('button-pointer');
+
+        window.setActiveToolWindow = (event, toolId) => {
+          if (selectedControl) {
+            selectedControl.classList.remove("selected");
+          }
+
+          selectedControl = event.target;
+          selectedControl.classList.add("selected");
+
+          window.game.setActiveToolType(toolId);
+        }
+
+        window.togglePause = () => {
+          const pauseButton = document.getElementById('button-pause');
+          window.game.pause();
+
+          if (pauseButton.classList.contains("selected")) {
+            pauseButton.classList.remove("selected");
+          } else {
+            pauseButton.classList.add("selected");
+          }
+        }
+
+        let selectedBuilding = {};
+
+        window.updateInfoPanel = (selectedBuilding) => {
+          const infoPanel = document.getElementById('info-panel');
+          infoPanel.style.visibility = "visible";
+          infoPanel.innerHTML = '<div class="info-heading">Building</div>';
+
+          const sensitiveKeys = ["update", "id", "dirty", "location", "maxLevel", "maxOccupancy"]
+
+          for (const [key, value] of Object.entries(selectedBuilding)) {
+            if (sensitiveKeys.includes(key)) continue;
+
+            if (value instanceof Array) {
+              console.log("key", key, "is an array")
+              infoPanel.innerHTML += `
+                <div class="info-heading">${key} (${value.length}/${selectedBuilding.maxOccupancy})</div>
+                <ul class="info-citizen-list">
+              `
+
+              for (const person of value) {
+                infoPanel.innerHTML += person.toHTML(); 
+              }
+              infoPanel.innerHTML += "</ul>"
+
+            } else {
+              infoPanel.innerHTML += `
+                              <span class="info-label">${key}</span>
+                              <span class="info-value">${value}</span>
+                              <br>
+                          `;
+            }
+          }
+        }
+
+        window.onSelectedObject = (newlySelectedBuilding) => {
+          console.log("newlySelectedBuilding from HTML", newlySelectedBuilding);
+
+          if (selectedBuilding) {
+            unregisterCallback(selectedBuilding.id, window.updateInfoPanel);
+          }
+
+          if (newlySelectedBuilding) {
+            // Assign a proxy of the actual building
+            selectedBuilding = newlySelectedBuilding;
+            registerCallback(selectedBuilding.id, window.updateInfoPanel);
+            window.updateInfoPanel(selectedBuilding);
+          }
+        }
+
+        window.onUnselectObject = () => {
+            selectedBuilding = {};
+            const infoPanel = document.getElementById('info-panel');
+            infoPanel.style.visibility = "hidden";
+        }
+
+      </script>
+</body>
+
+</html>
