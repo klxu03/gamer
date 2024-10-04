@@ -8,9 +8,9 @@ dependencies:
   '@types/three':
     specifier: ^0.169.0
     version: 0.169.0
-  collections:
-    specifier: ^5.1.13
-    version: 5.1.13
+  denque:
+    specifier: ^2.1.0
+    version: 2.1.0
   three:
     specifier: ^0.169.0
     version: 0.169.0
@@ -389,10 +389,9 @@ packages:
     resolution: {integrity: sha512-vOUHDxj0azl7BSj4YAy6cc6q5s7F1KfF5GI1er/w6togN0MqzS/d8U+H0LH1XpLbFup+UaA7aMtia/aSx3DE0w==}
     dev: false
 
-  /collections@5.1.13:
-    resolution: {integrity: sha512-SCb6Qd+d3Z02corWQ7/mqXiXeeTdHvkP6TeFSYfGYdCFp1WrjSNZ3j6y8Y3T/7osGEe0iOcU2g1d346l99m4Lg==}
-    dependencies:
-      weak-map: 1.0.8
+  /denque@2.1.0:
+    resolution: {integrity: sha512-HVQE3AAb/pxF8fQAoiqpvg9i3evqug3hoiwakOyZAwJm+6vZehbkYXZ0l4JxS+I3QxM97v5aaRNhj8v5oBhekw==}
+    engines: {node: '>=0.10'}
     dev: false
 
   /esbuild@0.21.5:
@@ -538,8 +537,4 @@ packages:
       rollup: 4.23.0
     optionalDependencies:
       fsevents: 2.3.3
-    dev: false
-
-  /weak-map@1.0.8:
-    resolution: {integrity: sha512-lNR9aAefbGPpHO7AEnY0hCFjz1eTkWCXYvkTRrTHs9qv8zJp+SkVYpzfLIFXQQiG3tVvbNFQgVg2bQS8YGgxyw==}
     dev: false
