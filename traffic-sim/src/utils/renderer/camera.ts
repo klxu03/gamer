@@ -37,7 +37,6 @@ class Camera {
 
     #onScroll(event: WheelEvent) {
         this.cameraInstance.handleZoom(event.deltaY);
-        event.preventDefault();
     }
 
     public static getInstance(): Camera {

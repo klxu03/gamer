@@ -48,10 +48,10 @@ By following this approach, your renderer will efficiently handle updates in syn
     }
 
     #update() {
-        RenderManager.getInstance().renderQueue.push([() => {
+        RenderManager.getInstance().addRender(() => {
             this.#cube!.rotation.x += 0.01;
             this.#cube!.rotation.y += 0.01;
-        }, Date.now()]);
+        });
 
         RenderManager.getInstance().processRender(Date.now());
     }
