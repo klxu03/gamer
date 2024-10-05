@@ -44,12 +44,21 @@ class ArchetypesManager {
 
     public addEntity(archetype: Archetype, entity: number) {
         archetype.set.add(entity);
-        this.entities.push(archetype.components);
+        this.entities[entity] = archetype.components;
     }
 
     public removeEntity(archetype: Archetype, entity: number) {
         archetype.set.delete(entity);
         this.entities[entity] = new VectorInt();
+
+        // If there are no entities in this archetype, remove the archetype
+        if (archetype.set.size === 0) {
+            this.#archetypes.delete(archetype.components);
+            for (let i = 0; i < archetype.components.size; i++) {
+                const component = archetype.components.get(i);
+                this.#archetypeBase[component].splice(this.#archetypeBase[component].indexOf(archetype), 1);
+            }
+        }
     }
 
     public switchEntity(fromArchetype: Archetype, toArchetype: Archetype, entity: number) {
