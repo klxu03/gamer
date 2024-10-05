@@ -11,6 +11,9 @@ dependencies:
   denque:
     specifier: ^2.1.0
     version: 2.1.0
+  queue:
+    specifier: ^7.0.0
+    version: 7.0.0
   three:
     specifier: ^0.169.0
     version: 0.169.0
@@ -458,6 +461,10 @@ packages:
       nanoid: 3.3.7
       picocolors: 1.1.0
       source-map-js: 1.2.1
+    dev: false
+
+  /queue@7.0.0:
+    resolution: {integrity: sha512-sphwS7HdfQnvrJAXUNAUgpf9H/546IE3p/5Lf2jr71O4udEYlqAhkevykumas2FYuMkX/29JMOgrRdRoYZ/X9w==}
     dev: false
 
   /rollup@4.23.0:

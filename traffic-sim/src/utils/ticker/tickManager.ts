@@ -16,7 +16,7 @@ class TickManager {
         this.#dirty = new Denque<DirtyTriplet>();
     }
 
-    public static getInstance(): TickManager {
+    public static get getInstance(): TickManager {
         if (!TickManager.#instance) {
             TickManager.#instance = new TickManager();
         }

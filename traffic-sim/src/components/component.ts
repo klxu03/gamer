@@ -1,10 +1,11 @@
-import Entity from "../entities/entity";
-
 class Component {
-    entities: Map<number, Entity>;
+    /**
+     * An array of entities, indexed by entity ID, and value is the component value/state
+     */
+    entities: Array<Component | null>;
 
     constructor() {
-        this.entities = new Map();
+        this.entities = new Array();
     }
 }
 

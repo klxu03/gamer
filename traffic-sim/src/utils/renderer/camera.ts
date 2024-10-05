@@ -26,11 +26,11 @@ class Camera {
             return;
         }
 
-        if (InputManager.getInstance().mouseDown === MouseButton.LEFT) {
+        if (InputManager.getInstance.mouseDown === MouseButton.LEFT) {
             this.cameraInstance.handleRotation(dX, dY);
         }
 
-        if (InputManager.getInstance().mouseDown === MouseButton.RIGHT) {
+        if (InputManager.getInstance.mouseDown === MouseButton.RIGHT) {
             this.cameraInstance.handlePanning(dX, dY);
         }
     }
@@ -39,7 +39,7 @@ class Camera {
         this.cameraInstance.handleZoom(event.deltaY);
     }
 
-    public static getInstance(): Camera {
+    public static get getInstance(): Camera {
         if (!Camera.#instance) {
             const gameWindow = document.getElementById('render-target')!;
             Camera.#instance = new Camera(gameWindow);

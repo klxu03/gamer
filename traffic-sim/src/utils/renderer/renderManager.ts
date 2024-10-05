@@ -1,39 +1,32 @@
 import Denque from "denque";
 import Renderer from "../../render"
-
-/**
- * A pair of render function and the time it was added to the queue
- */
-type RenderPair = [() => void, number];
+import Queue from "queue";
 
 class RenderManager {
     static #instance: RenderManager;
+
     /**
      * A queue of lambda render functions to be called every frame
+     * TODO: Replace Denque with a queue, this queue supports callback functions and stuff out the gate
      */
-    #renderQueue: Denque<RenderPair>;
+    #renderQueue: Queue;
 
     constructor() {
-        this.#renderQueue = new Denque<RenderPair>();
+        this.#renderQueue = new Queue;
     }
 
     public addRender(renderFunction: () => void) {
-        this.#renderQueue.push([renderFunction, Date.now()]);
+        this.#renderQueue.push(renderFunction);
     }
 
     public processRender(date: number) {
-        while (this.#renderQueue.length > 0) {
-            const [renderFunction, time] = this.#renderQueue.peekFront()!;
-            if (date > time) {
-                renderFunction();
-                this.#renderQueue.shift();
-            } else {
-                break;
-            }
-        }
+        this.#renderQueue.start(err => {
+            if (err) throw err;
+            console.log("renderQueue done", this.#renderQueue.results);
+        })
     }
 
-    public static getInstance(): RenderManager {
+    public static get getInstance(): RenderManager {
         if (!RenderManager.#instance) {
             RenderManager.#instance = new RenderManager();
         }
@@ -41,4 +34,4 @@ class RenderManager {
     }
 }
 
-export { RenderManager, RenderPair };
+export { RenderManager };

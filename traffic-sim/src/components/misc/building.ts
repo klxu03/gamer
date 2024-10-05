@@ -1,5 +1,5 @@
 import Component from "../component";
-import Entity from "../../entities/entity";
+import VectorInt from "../../dsa/vector_int";
 
 enum BuildingType {
     HOUSE = 0,
@@ -11,7 +11,7 @@ class Building extends Component {
     height: number;
     maxHeight: number;
 
-    occupants: Entity[];
+    occupants = new VectorInt();
     maxOccupants: number;
 
     type: BuildingType;
@@ -22,7 +22,6 @@ class Building extends Component {
         this.height = height;
         this.maxHeight = maxHeight;
 
-        this.occupants = [];
         this.maxOccupants = maxOccupants;
 
         this.type = type;

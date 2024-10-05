@@ -29,7 +29,7 @@ class InputManager {
         this.mouseDown = MouseButton.NONE;
     }
 
-    public static getInstance(): InputManager {
+    public static get getInstance(): InputManager {
         if (!InputManager.#instance) {
             InputManager.#instance = new InputManager();
         }

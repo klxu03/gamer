@@ -14,7 +14,7 @@ class Renderer {
         this.#gameWindow = document.getElementById('render-target')!;
         this.scene = new THREE.Scene();
         this.#renderer = new THREE.WebGLRenderer();
-        this.#camera = Camera.getInstance().cameraInstance.camera;
+        this.#camera = Camera.getInstance.cameraInstance.camera;
         this.#renderer.setSize(this.#gameWindow.offsetWidth, this.#gameWindow.offsetHeight);
         this.#renderer.setClearColor(0x000000, 0);
         this.#gameWindow.appendChild(this.#renderer.domElement);
@@ -48,15 +48,15 @@ By following this approach, your renderer will efficiently handle updates in syn
     }
 
     #update() {
-        RenderManager.getInstance().addRender(() => {
+        RenderManager.getInstance.addRender(() => {
             this.#cube!.rotation.x += 0.01;
             this.#cube!.rotation.y += 0.01;
         });
 
-        RenderManager.getInstance().processRender(Date.now());
+        RenderManager.getInstance.processRender(Date.now());
     }
 
-    public static getInstance(): Renderer {
+    public static get getInstance(): Renderer {
         if (!Renderer.#instance) {
             Renderer.#instance = new Renderer();
         }
@@ -71,7 +71,7 @@ declare global {
 }
 
 window.onload = () => {
-    window.renderer = Renderer.getInstance();
+    window.renderer = Renderer.getInstance;
 }
 
 export default Renderer;
