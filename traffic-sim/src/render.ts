@@ -10,6 +10,8 @@ class Renderer {
     #camera: THREE.PerspectiveCamera;
     #cube: THREE.Mesh | null = null;
 
+    #renderManager: RenderManager;
+
     constructor() {
         this.#gameWindow = document.getElementById('render-target')!;
         this.scene = new THREE.Scene();
@@ -19,19 +21,13 @@ class Renderer {
         this.#renderer.setClearColor(0x000000, 0);
         this.#gameWindow.appendChild(this.#renderer.domElement);
 
+        this.#renderManager = RenderManager.getInstance;
+
         this.#renderer.setAnimationLoop(this.#animate.bind(this));
-        this.#createCube();
 
         window.addEventListener("contextmenu", (event) => {
             event.preventDefault();
         }, false);
-    }
-
-    #createCube() {
-        const geometry = new THREE.BoxGeometry(1, 1, 1);
-        const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-        this.#cube = new THREE.Mesh(geometry, material);
-        this.scene.add(this.#cube);
     }
 
     #animate() {
@@ -48,7 +44,7 @@ By following this approach, your renderer will efficiently handle updates in syn
     }
 
     #update() {
-        RenderManager.getInstance.addRender(() => {
+        this.#renderManager.addRender(() => {
             this.#cube!.rotation.x += 0.01;
             this.#cube!.rotation.y += 0.01;
 
@@ -57,7 +53,7 @@ By following this approach, your renderer will efficiently handle updates in syn
             });
         });
 
-        RenderManager.getInstance.processRender();
+        this.#renderManager.processRender();
     }
 
     public static get getInstance(): Renderer {

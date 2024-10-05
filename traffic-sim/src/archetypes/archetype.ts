@@ -1,6 +1,8 @@
 import VectorInt from "../dsa/vector_int";
 
 class Archetype {
+    public static instance: Archetype;
+
     /**
      * The components that make up this archetype
      */
@@ -14,6 +16,13 @@ class Archetype {
     constructor(components: VectorInt) {
         this.components = components;
         this.set = new Set();
+    }
+
+    public static get getInstance(): Archetype {
+        if (!Archetype.instance) {
+            Archetype.instance = new Archetype(new VectorInt());
+        }
+        return Archetype.instance;
     }
 }
 

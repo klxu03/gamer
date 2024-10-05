@@ -6,9 +6,15 @@ class EntityManager {
     maxEntityCount: number;
     availableEntities: Set<number>;
 
+    #componentManager: ComponentManager;
+    #archetypesManager: ArchetypesManager;
+
     constructor() {
         this.maxEntityCount = 0;
         this.availableEntities = new Set();
+
+        this.#componentManager = ComponentManager.getInstance;
+        this.#archetypesManager = ArchetypesManager.getInstance;
     }
 
     public createEntity(): number {
@@ -19,12 +25,12 @@ class EntityManager {
         }
 
         // add a new entity index to all components
-        ComponentManager.getInstance.components.forEach((component) => {
-            component.entities.push(null);
+        this.#componentManager.components.forEach((component) => {
+            this.#componentManager.componentList[this.#componentManager.getComponentId(component)].push(null);
         });
 
         // add a new entity index to archetypesManager
-        ArchetypesManager.getInstance.entities.push(new VectorInt());
+        this.#archetypesManager.entities.push(new VectorInt());
 
         return this.maxEntityCount++;
     }
@@ -33,16 +39,16 @@ class EntityManager {
         this.availableEntities.add(entity);
 
         // get the components this entity had
-        const components = ArchetypesManager.getInstance.entities[entity];
+        const components = this.#archetypesManager.entities[entity];
 
         // set all components for this entity to null
         for (let i = 0; i < components.size; i++) {
             const component = components.get(i);
-            ComponentManager.getInstance.components[component].entities[entity] = null;
+            this.#componentManager.componentList[component][entity] = null;
         }
 
         // remove the entity index from archetypesManager
-        ArchetypesManager.getInstance.removeEntity(ArchetypesManager.getInstance.getArchetype(components), entity);
+        this.#archetypesManager.removeEntity(this.#archetypesManager.getArchetype(components), entity);
     }
 }
 

@@ -1,11 +1,20 @@
 class Component {
     /**
-     * An array of entities, indexed by entity ID, and value is the component value/state
+     * Whether the component has been updated since the last tick
      */
-    entities: Array<Component | null>;
+    public dirty: boolean;
+
+    public static instance: Component;
 
     constructor() {
-        this.entities = new Array();
+        this.dirty = false;
+    }
+
+    public static get getInstance(): Component {
+        if (!Component.instance) {
+            Component.instance = new Component();
+        }
+        return Component.instance;
     }
 }
 

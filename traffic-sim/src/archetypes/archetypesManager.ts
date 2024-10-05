@@ -28,7 +28,8 @@ class ArchetypesManager {
     public getArchetype(components: VectorInt): Archetype {
         // New archetype being created
         if (!this.#archetypes.has(components)) {
-            const archetype = new Archetype(components);
+            const archetype = Archetype.getInstance;
+            archetype.components = components;
             this.#archetypes.set(components, archetype);
 
             if (components.size > 1) {

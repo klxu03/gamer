@@ -1,0 +1,8 @@
+I am coding a 3D game in Typescript using three.js.
+This game will be trying to clone Sim-city except with more accurate car traffic and pedestrian simulation.
+The game will be a city builder, and each building will have different effects on citizens. 
+
+I am implementing an ECS for the game that handles all the entity logic 
+
+I have a render system that renders the scene, and a tick system that handles changing all the logic in the game
+These two should have a separation of concerns and run independently to each other, however the ticker should be able to add calls into the renderQueue 
