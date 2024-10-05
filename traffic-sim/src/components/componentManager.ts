@@ -3,7 +3,14 @@ import Component from "./component";
 class ComponentManager {
     public static instance: ComponentManager;
 
+    /**
+     * Reverse map, index to component
+     */
     public components: Array<Component>;
+
+    /**
+     * Map, component to index
+     */
     public componentMap: Map<Component, number>;
 
     constructor() {
