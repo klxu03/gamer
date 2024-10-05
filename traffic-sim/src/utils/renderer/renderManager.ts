@@ -11,18 +11,33 @@ class RenderManager {
      */
     #renderQueue: Queue;
 
+    #currentlyRendering: boolean;
+
     constructor() {
         this.#renderQueue = new Queue;
+        this.#currentlyRendering = false;
     }
 
+    /**
+     * Adds a render function to the queue, it should end with the following promise:
+     * 
+            return new Promise((resolve) => {
+                resolve(true);
+            });
+     * @param renderFunction The function to be rendered to the scene
+     */
     public addRender(renderFunction: () => void) {
         this.#renderQueue.push(renderFunction);
     }
 
-    public processRender(date: number) {
+    public processRender() {
+        if (this.#currentlyRendering) return;
+
+        this.#currentlyRendering = true;
+
         this.#renderQueue.start(err => {
+            this.#currentlyRendering = false;
             if (err) throw err;
-            console.log("renderQueue done", this.#renderQueue.results);
         })
     }
 

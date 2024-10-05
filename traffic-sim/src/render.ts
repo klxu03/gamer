@@ -51,9 +51,13 @@ By following this approach, your renderer will efficiently handle updates in syn
         RenderManager.getInstance.addRender(() => {
             this.#cube!.rotation.x += 0.01;
             this.#cube!.rotation.y += 0.01;
+
+            return new Promise((resolve) => {
+                resolve(true);
+            });
         });
 
-        RenderManager.getInstance.processRender(Date.now());
+        RenderManager.getInstance.processRender();
     }
 
     public static get getInstance(): Renderer {
