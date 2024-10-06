@@ -4,9 +4,9 @@ type Triplet<T, U, V> = [T, U, V];
 
 /**
  * A pair of numbers representing the entity ID, component ID, and the last tick that the component was updated
- * Or a function that should be called and the tick that it was called at
+ * Or a function that should be called that returns the tick it was called at
  */
-type DirtyTriplet = Triplet<number, number, number> | [(() => void), number];
+type DirtyTriplet = Triplet<number, number, number> | (() => number);
 
 // set up the tick, store all the systems and do the logic to figure out which ones to call
 class TickManager {
@@ -30,20 +30,21 @@ class TickManager {
         while (this.#dirtyDeque.length > 0) {
             const dirty = this.#dirtyDeque.shift()!;
 
-            if (typeof dirty[0] === "function") {
+            if (typeof dirty === "function") {
                 // DirtyTriplet was a function, so we just call it
-                const [dirtyFunction, tick] = dirty;
+                const tick = dirty();
 
-                if (tick <= tickStart) {
-                    console.log("running the dirty function");
-                    dirtyFunction();
-                } 
+                if (tick > tickStart) {
+                    break;
+                }
             } else {
                 // DirtyTriplet was a triplet, so we need to search for which system handles this change
                 const [entity, component, tick] = dirty;
 
                 if (tick! <= tickStart) {
                     this.#tick(entity, component, tick!);
+                } else {
+                    break;
                 }
             }
         }

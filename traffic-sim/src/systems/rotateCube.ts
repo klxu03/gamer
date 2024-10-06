@@ -14,5 +14,8 @@ export default function rotateCube(entity: number) {
 
     renderableComponent.dirty = false;
 
-    TickManager.getInstance().addDirty([() => {rotateCube(entity)}, Date.now()]);
+    TickManager.getInstance().addDirty(() => {
+        rotateCube(entity);
+        return Date.now();
+    });
 }

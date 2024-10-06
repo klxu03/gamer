@@ -16,7 +16,7 @@ class Ticker {
     #tickManager: TickManager;
 
     constructor() {
-        this.#tickRate = Math.ceil(1000 / 10);
+        this.#tickRate = Math.ceil(1000 / 64);
         this.lastTick = Date.now();
 
         this.#tickManager = TickManager.getInstance();
@@ -33,8 +33,6 @@ class Ticker {
         }
 
         this.lastTick = Date.now();
-
-        console.log("tick");
 
         this.#tickManager.tick(this.lastTick);
     }
