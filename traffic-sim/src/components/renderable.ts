@@ -24,7 +24,7 @@ class Renderable extends Component {
         this.mesh = render();
         
         const renderFunction = () => {
-            Renderer.getInstance().scene.add(this.mesh);
+            Renderer.getInstance.scene.add(this.mesh);
         }
         this.render = renderFunction;
     }

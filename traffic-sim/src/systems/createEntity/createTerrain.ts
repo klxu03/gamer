@@ -17,11 +17,11 @@ class CreateTerrain {
     #archetypesManager: ArchetypesManager;
     #renderManager: RenderManager;
     constructor() {
-        this.#entityManager = EntityManager.getInstance();
-        this.#componentManager = ComponentManager.getInstance();
-        this.#assetManager = AssetManager.getInstance();
-        this.#archetypesManager = ArchetypesManager.getInstance();
-        this.#renderManager = RenderManager.getInstance();
+        this.#entityManager = EntityManager.getInstance;
+        this.#componentManager = ComponentManager.getInstance;
+        this.#assetManager = AssetManager.getInstance;
+        this.#archetypesManager = ArchetypesManager.getInstance;
+        this.#renderManager = RenderManager.getInstance;
     }
 
     /**
@@ -68,7 +68,7 @@ class CreateTerrain {
         return entityId;
     }
 
-    public static getInstance(): CreateTerrain {
+    public static get getInstance(): CreateTerrain {
         if (!CreateTerrain.instance) {
             CreateTerrain.instance = new CreateTerrain();
         }

@@ -15,8 +15,8 @@ class EntityManager {
         this.maxEntityCount = 0;
         this.availableEntities = new Set();
 
-        this.#componentManager = ComponentManager.getInstance();
-        this.#archetypesManager = ArchetypesManager.getInstance();
+        this.#componentManager = ComponentManager.getInstance;
+        this.#archetypesManager = ArchetypesManager.getInstance;
     }
 
     public createEntity(): number {
@@ -53,7 +53,7 @@ class EntityManager {
         this.#archetypesManager.removeEntity(this.#archetypesManager.getArchetype(components), entity);
     }
 
-    public static getInstance(): EntityManager {
+    public static get getInstance(): EntityManager {
         if (!EntityManager.instance) {
             EntityManager.instance = new EntityManager();
         }

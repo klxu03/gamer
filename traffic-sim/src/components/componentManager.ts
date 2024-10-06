@@ -72,7 +72,7 @@ class ComponentManager {
         return this.componentList[componentId][entityId];
     }
 
-    public static getInstance(): ComponentManager {
+    public static get getInstance(): ComponentManager {
         if (!ComponentManager.instance) {
             ComponentManager.instance = new ComponentManager();
         }

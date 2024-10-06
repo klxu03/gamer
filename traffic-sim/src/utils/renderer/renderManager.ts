@@ -20,7 +20,7 @@ class RenderManager {
         this.#renderQueue = new Queue;
         this.#currentlyRendering = false;
 
-        this.#ticker = Ticker.getInstance();
+        this.#ticker = Ticker.getInstance;
     }
 
     /**
@@ -46,7 +46,7 @@ class RenderManager {
         /*
         const startTime = Date.now();
         const entity = 0;
-        const componentManager = ComponentManager.getInstance();
+        const componentManager = ComponentManager.getInstance;
 
         const renderableComponent = componentManager.getEntityComponent(entity, Renderable)! as Renderable;
         renderableComponent.dirty = true;
@@ -68,7 +68,7 @@ class RenderManager {
         })
     }
 
-    public static getInstance(): RenderManager {
+    public static get getInstance(): RenderManager {
         if (!RenderManager.#instance) {
             RenderManager.#instance = new RenderManager();
         }

@@ -11,16 +11,16 @@ import { TickManager } from "../utils/ticker/tickManager";
  */
 export default function initSystem() {
     // Initialize entities
-    EntityManager.getInstance();
+    EntityManager.getInstance;
 
     // Initialize components
-    ComponentManager.getInstance();
+    ComponentManager.getInstance;
 
     // Initialize archetypes
-    ArchetypesManager.getInstance();
+    ArchetypesManager.getInstance;
 
     // Create the terrain block
-    const terrainId = CreateTerrain.getInstance().createTerrain(true, 0, 0, 0);
+    const terrainId = CreateTerrain.getInstance.createTerrain(true, 0, 0, 0);
 
     // Rotate the terrain block
     rotateCube(terrainId);

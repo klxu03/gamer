@@ -51,7 +51,7 @@ class AssetManager {
         return this.#meshFactory.get(id)!;
     }
 
-    public static getInstance(): AssetManager {
+    public static get getInstance(): AssetManager {
         if (!AssetManager.instance) {
             AssetManager.instance = new AssetManager();
         }

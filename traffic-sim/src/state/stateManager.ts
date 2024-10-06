@@ -8,7 +8,7 @@ class StateManager {
         this.gameState = new GameState();
     }
 
-    public static getInstance(): StateManager {
+    public static get getInstance(): StateManager {
         if (!StateManager.#instance) {
             StateManager.#instance = new StateManager();
         }

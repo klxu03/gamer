@@ -3,7 +3,7 @@ import Renderable from "../components/renderable";
 import { TickManager } from "../utils/ticker/tickManager";
 
 export default function rotateCube(entity: number) {
-    const componentManager = ComponentManager.getInstance();
+    const componentManager = ComponentManager.getInstance;
 
     const renderableComponent = componentManager.getEntityComponent(entity, Renderable)! as Renderable;
     renderableComponent.dirty = true;
@@ -14,7 +14,7 @@ export default function rotateCube(entity: number) {
 
     renderableComponent.dirty = false;
 
-    TickManager.getInstance().addDirty(() => {
+    TickManager.getInstance.addDirty(() => {
         rotateCube(entity);
         return Date.now();
     });

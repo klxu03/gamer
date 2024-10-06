@@ -18,7 +18,7 @@ class Archetype {
         this.set = new Set();
     }
 
-    public static getInstance(): Archetype {
+    public static get getInstance(): Archetype {
         if (!Archetype.instance) {
             Archetype.instance = new Archetype(new VectorInt());
         }

@@ -19,7 +19,7 @@ class Ticker {
         this.#tickRate = Math.ceil(1000 / 64);
         this.lastTick = Date.now();
 
-        this.#tickManager = TickManager.getInstance();
+        this.#tickManager = TickManager.getInstance;
     }
 
     /**
@@ -37,7 +37,7 @@ class Ticker {
         this.#tickManager.tick(this.lastTick);
     }
 
-    public static getInstance(): Ticker {
+    public static get getInstance(): Ticker {
         if (!Ticker.instance) {
             Ticker.instance = new Ticker();
         }
