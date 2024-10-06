@@ -1,6 +1,9 @@
 import Queue from "queue";
 import Ticker from "../../tick";
 
+import ComponentManager from "../../components/componentManager";
+import Renderable from "../../components/renderable";
+
 class RenderManager {
     static #instance: RenderManager;
 
@@ -38,7 +41,21 @@ class RenderManager {
         if (this.#currentlyRendering) return;
 
         this.#currentlyRendering = true;
-        this.#ticker.tick();
+        // this.#ticker.tick();
+
+        /* */
+        const entity = 0;
+        const componentManager = ComponentManager.getInstance();
+
+        const renderableComponent = componentManager.getEntityComponent(entity, Renderable)! as Renderable;
+        renderableComponent.dirty = true;
+        const cube = renderableComponent.mesh;
+
+        cube.rotation.x += 0.01;
+        cube.rotation.y += 0.01;
+
+        renderableComponent.dirty = false;
+        /* */
 
         this.#renderQueue.start(err => {
             this.#currentlyRendering = false;
