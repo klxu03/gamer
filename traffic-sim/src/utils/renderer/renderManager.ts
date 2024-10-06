@@ -9,7 +9,6 @@ class RenderManager {
 
     /**
      * A queue of lambda render functions to be called every frame
-     * TODO: Replace Denque with a queue, this queue supports callback functions and stuff out the gate
      */
     #renderQueue: Queue;
 
@@ -41,9 +40,11 @@ class RenderManager {
         if (this.#currentlyRendering) return;
 
         this.#currentlyRendering = true;
-        // this.#ticker.tick();
+        this.#ticker.tick();
 
         /* */
+        /*
+        const startTime = Date.now();
         const entity = 0;
         const componentManager = ComponentManager.getInstance();
 
@@ -55,6 +56,10 @@ class RenderManager {
         cube.rotation.y += 0.01;
 
         renderableComponent.dirty = false;
+
+        const endTime = Date.now();
+        console.log("render time", endTime - startTime);
+        */
         /* */
 
         this.#renderQueue.start(err => {
