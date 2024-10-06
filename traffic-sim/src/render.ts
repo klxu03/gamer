@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import Camera from './utils/renderer/camera';
-import { RenderManager } from './utils/renderer/renderManager';
+import RenderManager from './utils/renderer/renderManager';
+import initSystem from './systems/initSystem';
 
 class Renderer {
     static #instance: Renderer;
@@ -8,7 +9,6 @@ class Renderer {
     scene: THREE.Scene;
     #renderer: THREE.WebGLRenderer;
     #camera: THREE.PerspectiveCamera;
-    #cube: THREE.Mesh | null = null;
 
     #renderManager: RenderManager;
 
@@ -16,18 +16,20 @@ class Renderer {
         this.#gameWindow = document.getElementById('render-target')!;
         this.scene = new THREE.Scene();
         this.#renderer = new THREE.WebGLRenderer();
-        this.#camera = Camera.getInstance.cameraInstance.camera;
+        this.#camera = Camera.getInstance().cameraInstance.camera;
         this.#renderer.setSize(this.#gameWindow.offsetWidth, this.#gameWindow.offsetHeight);
         this.#renderer.setClearColor(0x000000, 0);
         this.#gameWindow.appendChild(this.#renderer.domElement);
 
-        this.#renderManager = RenderManager.getInstance;
+        this.#renderManager = RenderManager.getInstance();
 
         this.#renderer.setAnimationLoop(this.#animate.bind(this));
 
         window.addEventListener("contextmenu", (event) => {
             event.preventDefault();
         }, false);
+
+        initSystem();
     }
 
     #animate() {
@@ -44,19 +46,10 @@ By following this approach, your renderer will efficiently handle updates in syn
     }
 
     #update() {
-        this.#renderManager.addRender(() => {
-            this.#cube!.rotation.x += 0.01;
-            this.#cube!.rotation.y += 0.01;
-
-            return new Promise((resolve) => {
-                resolve(true);
-            });
-        });
-
         this.#renderManager.processRender();
     }
 
-    public static get getInstance(): Renderer {
+    public static getInstance(): Renderer {
         if (!Renderer.#instance) {
             Renderer.#instance = new Renderer();
         }
@@ -71,7 +64,7 @@ declare global {
 }
 
 window.onload = () => {
-    window.renderer = Renderer.getInstance;
+    window.renderer = Renderer.getInstance();
 }
 
 export default Renderer;

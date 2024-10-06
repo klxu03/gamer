@@ -28,13 +28,16 @@ class ArchetypesManager {
     public getArchetype(components: VectorInt): Archetype {
         // New archetype being created
         if (!this.#archetypes.has(components)) {
-            const archetype = Archetype.getInstance;
+            const archetype = Archetype.getInstance();
             archetype.components = components;
             this.#archetypes.set(components, archetype);
 
             if (components.size > 1) {
                 for (let i = 0; i < components.size; i++) {
                     const component = components.get(i);
+                    if (!this.#archetypeBase[component]) {
+                        this.#archetypeBase[component] = new Array();
+                    }
                     this.#archetypeBase[component].push(archetype);
                 }
             }
@@ -67,7 +70,7 @@ class ArchetypesManager {
         this.addEntity(toArchetype, entity);
     }
 
-    public static get getInstance(): ArchetypesManager {
+    public static getInstance(): ArchetypesManager {
         if (!ArchetypesManager.instance) {
             ArchetypesManager.instance = new ArchetypesManager();
         }

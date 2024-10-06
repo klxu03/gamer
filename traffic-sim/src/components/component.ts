@@ -10,7 +10,7 @@ class Component {
         this.dirty = false;
     }
 
-    public static get getInstance(): Component {
+    public static getInstance(): Component {
         if (!Component.instance) {
             Component.instance = new Component();
         }

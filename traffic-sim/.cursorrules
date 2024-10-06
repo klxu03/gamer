@@ -1,4 +1,5 @@
 I am coding a 3D game in Typescript using three.js.
+However, I am not very familiar with typescript so if there is anything typescript specific, I would like an additional explanation to how it works and help me learn Typescript.
 This game will be trying to clone Sim-city except with more accurate car traffic and pedestrian simulation.
 The game will be a city builder, and each building will have different effects on citizens. 
 

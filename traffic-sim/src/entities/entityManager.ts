@@ -3,6 +3,8 @@ import ArchetypesManager from "../archetypes/archetypesManager";
 import VectorInt from "../dsa/vector_int";
 
 class EntityManager {
+    public static instance: EntityManager;
+
     maxEntityCount: number;
     availableEntities: Set<number>;
 
@@ -13,8 +15,8 @@ class EntityManager {
         this.maxEntityCount = 0;
         this.availableEntities = new Set();
 
-        this.#componentManager = ComponentManager.getInstance;
-        this.#archetypesManager = ArchetypesManager.getInstance;
+        this.#componentManager = ComponentManager.getInstance();
+        this.#archetypesManager = ArchetypesManager.getInstance();
     }
 
     public createEntity(): number {
@@ -25,8 +27,8 @@ class EntityManager {
         }
 
         // add a new entity index to all components
-        this.#componentManager.components.forEach((component) => {
-            this.#componentManager.componentList[this.#componentManager.getComponentId(component)].push(null);
+        this.#componentManager.componentList.forEach((component) => {
+            component.push(null);
         });
 
         // add a new entity index to archetypesManager
@@ -49,6 +51,14 @@ class EntityManager {
 
         // remove the entity index from archetypesManager
         this.#archetypesManager.removeEntity(this.#archetypesManager.getArchetype(components), entity);
+    }
+
+    public static getInstance(): EntityManager {
+        if (!EntityManager.instance) {
+            EntityManager.instance = new EntityManager();
+        }
+
+        return EntityManager.instance;
     }
 }
 

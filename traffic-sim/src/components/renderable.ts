@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import Renderer from "../render";
 import Component from "./component";
 
 class Renderable extends Component {
@@ -8,7 +9,9 @@ class Renderable extends Component {
      * Each renderable entity must implement this method to return a 3D object to be rendered 
      * @returns A 3D object to be rendered
      */
-    render: () => THREE.Object3D;
+    public render: () => void;
+
+    public mesh: THREE.Object3D;
 
     /**
      * 
@@ -18,7 +21,12 @@ class Renderable extends Component {
         super();
 
         this.createdAt = Date.now();
-        this.render = render;
+        this.mesh = render();
+        
+        const renderFunction = () => {
+            Renderer.getInstance().scene.add(this.mesh);
+        }
+        this.render = renderFunction;
     }
 }
 

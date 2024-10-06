@@ -13,46 +13,33 @@ class Ticker {
      */
     public lastTick: number;
 
-    /**
-     * The interval for starting the tick loop
-     */
-    #interval: number;
-
     #tickManager: TickManager;
 
     constructor() {
-        this.#tickRate = Math.ceil(1000 / 128);
+        this.#tickRate = Math.ceil(1000 / 10);
         this.lastTick = Date.now();
-        this.#interval = 0;
 
-        this.#tickManager = TickManager.getInstance;
-
-        this.#start();
-    }
-
-    #start() {
-        this.#interval = setInterval(this.tick.bind(this), this.#tickRate);
+        this.#tickManager = TickManager.getInstance();
     }
 
     /**
-     * Stops the tick loop
+     * Tick the game
      */
-    public stop() {
-        clearInterval(this.#interval);
-    }
-    
-    tick() {
+    public tick() {
         const delta = Date.now() - this.lastTick;
 
-        if (delta < this.#tickRate) {
+        if (delta < this.#tickRate || this.#tickManager.currentlyTicking) {
             return;
         }
+
         this.lastTick = Date.now();
 
-        // call tick manager
+        console.log("tick");
+
+        this.#tickManager.tick(this.lastTick);
     }
 
-    public static get getInstance(): Ticker {
+    public static getInstance(): Ticker {
         if (!Ticker.instance) {
             Ticker.instance = new Ticker();
         }

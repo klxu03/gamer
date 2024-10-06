@@ -4,18 +4,19 @@ type Triplet<T, U, V> = [T, U, V];
 
 /**
  * A pair of numbers representing the entity ID, component ID, and the last tick that the component was updated
+ * Or a function that should be called and the tick that it was called at
  */
-type DirtyTriplet = Triplet<number, number, number>;
+type DirtyTriplet = Triplet<number, number, number> | [(() => void), number];
 
 // set up the tick, store all the systems and do the logic to figure out which ones to call
 class TickManager {
     static #instance: TickManager;
-    #dirty: Denque<DirtyTriplet>;
-    #currentlyTicking: boolean;
+    #dirtyDeque: Denque<DirtyTriplet>;
+    public currentlyTicking: boolean;
 
     constructor() {
-        this.#dirty = new Denque<DirtyTriplet>();
-        this.#currentlyTicking = false;
+        this.#dirtyDeque = new Denque<DirtyTriplet>();
+        this.currentlyTicking = false;
     }
 
     /**
@@ -24,17 +25,29 @@ class TickManager {
      * @returns Whether the tick loop finished
      */
     public tick(tickStart: number): boolean {
-        if (this.#currentlyTicking) return false;
-        this.#currentlyTicking = true;
+        this.currentlyTicking = true;
 
-        while (this.#dirty.length > 0) {
-            const [entity, component, tick] = this.#dirty.shift()!;
+        while (this.#dirtyDeque.length > 0) {
+            const dirty = this.#dirtyDeque.shift()!;
 
-            if (tick <= tickStart) {
-                this.#tick(entity, component, tick);
+            if (typeof dirty[0] === "function") {
+                // DirtyTriplet was a function, so we just call it
+                const [dirtyFunction, tick] = dirty;
+
+                if (tick <= tickStart) {
+                    console.log("running the dirty function");
+                    dirtyFunction();
+                } 
+            } else {
+                // DirtyTriplet was a triplet, so we need to search for which system handles this change
+                const [entity, component, tick] = dirty;
+
+                if (tick! <= tickStart) {
+                    this.#tick(entity, component, tick!);
+                }
             }
         }
-        this.#currentlyTicking = false;
+        this.currentlyTicking = false;
 
         return true;
     }
@@ -49,7 +62,11 @@ class TickManager {
         // TODO: Implement
     }
 
-    public static get getInstance(): TickManager {
+    public addDirty(dirty: DirtyTriplet) {
+        this.#dirtyDeque.push(dirty);
+    }
+
+    public static getInstance(): TickManager {
         if (!TickManager.#instance) {
             TickManager.#instance = new TickManager();
         }

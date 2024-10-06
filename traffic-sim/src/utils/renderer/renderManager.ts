@@ -1,6 +1,5 @@
-import Denque from "denque";
-import Renderer from "../../render"
 import Queue from "queue";
+import Ticker from "../../tick";
 
 class RenderManager {
     static #instance: RenderManager;
@@ -13,9 +12,13 @@ class RenderManager {
 
     #currentlyRendering: boolean;
 
+    #ticker: Ticker;
+
     constructor() {
         this.#renderQueue = new Queue;
         this.#currentlyRendering = false;
+
+        this.#ticker = Ticker.getInstance();
     }
 
     /**
@@ -27,6 +30,7 @@ class RenderManager {
      * @param renderFunction The function to be rendered to the scene
      */
     public addRender(renderFunction: () => void) {
+        console.log("Adding render function to queue", renderFunction);
         this.#renderQueue.push(renderFunction);
     }
 
@@ -34,6 +38,7 @@ class RenderManager {
         if (this.#currentlyRendering) return;
 
         this.#currentlyRendering = true;
+        this.#ticker.tick();
 
         this.#renderQueue.start(err => {
             this.#currentlyRendering = false;
@@ -41,7 +46,7 @@ class RenderManager {
         })
     }
 
-    public static get getInstance(): RenderManager {
+    public static getInstance(): RenderManager {
         if (!RenderManager.#instance) {
             RenderManager.#instance = new RenderManager();
         }
@@ -49,4 +54,4 @@ class RenderManager {
     }
 }
 
-export { RenderManager };
+export default RenderManager;
