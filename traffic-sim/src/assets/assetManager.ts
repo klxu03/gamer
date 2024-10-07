@@ -49,35 +49,35 @@ class AssetManager {
     return texture;
   }
 
-  #loadModel(name: string, url: string, options: ModelOptions) {
+  async #loadModel(name: string, url: string, options: ModelOptions) {
     const recieveShadow = options.recieveShadow ?? true;
     const castShadow = options.castShadow ?? true;
     const rotation = options.rotation ?? 0;
     const scale = options.scale ?? 1;
 
-    this.#gltfLoader.load(url, (glb) => {
-      let mesh = glb.scene;
+    const glb = await this.#gltfLoader.loadAsync(url);
 
-      mesh.traverse((obj) => {
-        if (obj instanceof THREE.Mesh) {
-          obj.material = new THREE.MeshLambertMaterial({
-            map: this.textures.get("base"),
-            specularMap: this.textures.get("specular"),
-          })
+    let mesh = glb.scene;
 
-          obj.receiveShadow = recieveShadow;
-          obj.castShadow = castShadow;
-        }
+    mesh.traverse((obj) => {
+      if (obj instanceof THREE.Mesh) {
+        obj.material = new THREE.MeshLambertMaterial({
+          map: this.textures.get("base"),
+          specularMap: this.textures.get("specular"),
+        })
 
-        mesh.rotation.set(0, THREE.MathUtils.degToRad(rotation), 0);
-        mesh.scale.set(scale / 30, scale / 30, scale / 30);
-      })
+        obj.receiveShadow = recieveShadow;
+        obj.castShadow = castShadow;
+      }
 
-      mesh.name = name;
+      mesh.rotation.set(0, THREE.MathUtils.degToRad(rotation), 0);
+      mesh.scale.set(scale / 30, scale / 30, scale / 30);
+    })
 
-      console.log("finished loading model", name, "mesh is ", mesh);
-      this.#meshFactory.set(name, mesh);
-    });
+    mesh.name = name;
+
+    console.log("finished loading model", name, "mesh is ", mesh);
+    this.#meshFactory.set(name, mesh);
   }
 
   #initTextures() {
@@ -90,10 +90,16 @@ class AssetManager {
     this.#meshFactory.set("grass", this.#assetManagerUtils.createGrass());
   }
 
-  public initModels() {
+  /**
+   * Loads all models, returns true when all models are loaded
+   * @returns Promise<boolean>
+   */
+  public async initModels(): Promise<boolean> {
     for (const [key, value] of Object.entries(models)) {
-      this.#loadModel(key, value.url, value.options);
+      await this.#loadModel(key, value.url, value.options);
     }
+
+    return true;
   }
 
   public getMesh(id: string): THREE.Object3D {

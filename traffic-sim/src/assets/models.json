@@ -186,7 +186,7 @@
       "castShadow": false
     }
   },
-  "grass": {
+  "grass-model": {
     "type": "terrain",
     "url": "/models/tile-plain_grass.glb",
     "options": {

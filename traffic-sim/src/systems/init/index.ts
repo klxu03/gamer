@@ -15,19 +15,15 @@ import RenderManager from "../../utils/renderer/renderManager";
 /**
  * Initialize the logic and frames for the game
  */
-export default function initSystem() {
+export default async function initSystem() {
     // Initialize entityManager, componentManager, archetypesManager
     EntityManager.getInstance;
     ComponentManager.getInstance;
     ArchetypesManager.getInstance;
 
-    RenderManager.getInstance.addRender(() => {
-        AssetManager.getInstance.initModels();
+    await AssetManager.getInstance.initModels();
+    console.log("All models loaded");
 
-        return new Promise((resolve) => {
-            resolve(true);
-        });
-    });
     RenderManager.getInstance.addRender(() => {
         initTerrain();
 
@@ -45,9 +41,7 @@ export default function initSystem() {
 
     RenderManager.getInstance.addRender(() => {
         // Placing home after 2 seconds
-        setTimeout(() => {
-            CreateBuilding.getInstance.createBuilding(3, 3, 0);
-        }, 2000);
+        CreateBuilding.getInstance.createBuilding(3, 3, 0);
 
         return new Promise((resolve) => {
             resolve(true);
