@@ -34,7 +34,7 @@ class CreateBuilding {
     public createBuilding(x: number, y: number, z: number, buildingType: BuildingType, model: string): number {
         const entityId = this.#entityManager.createEntity();
 
-        const building = new Building(0, 0, 0, buildingType, [], x, y, z);
+        const building = new Building(1, 3, 4, buildingType, [], x, y, z);
         this.#componentManager.addEntityToComponent(entityId, building);
 
         const renderBuilding = () => {
