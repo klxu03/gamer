@@ -25,6 +25,38 @@ class CreateTerrain {
         this.#renderManager = RenderManager.getInstance;
     }
 
+    #createGridTerrain(entityId: number, x: number, y: number, z: number): Renderable {
+        const renderGrid = () => {
+            const gridMesh = this.#assetManager.getMesh("grid").clone();
+            gridMesh.userData = { id: "grid", x, y };
+            gridMesh.position.set(x, z, y);
+
+            return gridMesh;
+        }
+
+        const renderable = new Renderable(renderGrid);
+        renderable.dirty = true;
+        this.#componentManager.addEntityToComponent(entityId, renderable);
+
+        return renderable;
+    }
+
+    #createGrassTerrain(entityId: number, x: number, y: number, z: number): Renderable {
+        const renderGrass = () => {
+            const grassMesh = this.#assetManager.getMesh("grass").clone();
+            grassMesh.userData = { id: "grass", x, y };
+            grassMesh.position.set(x, z, y);
+
+            return grassMesh;
+        }
+
+        const renderable = new Renderable(renderGrass);
+        renderable.dirty = true;
+        this.#componentManager.addEntityToComponent(entityId, renderable);
+
+        return renderable;
+    }
+
     /**
      * Creates a terrain entity
      * @param isDevelopable Whether the terrain is developable
@@ -42,17 +74,7 @@ class CreateTerrain {
         const terrain = new Terrain(isDevelopable);
         this.#componentManager.addEntityToComponent(entityId, terrain);
 
-        const renderGrass = () => {
-            const mesh = this.#assetManager.getMesh("grass").clone();
-            mesh.userData = { id: "grass", x, y };
-            mesh.position.set(x, z, y);
-
-            return mesh;
-        }
-
-        const renderable = new Renderable(renderGrass);
-        renderable.dirty = true;
-        this.#componentManager.addEntityToComponent(entityId, renderable);
+        const renderable = this.#createGridTerrain(entityId, x, y, z);
 
         const componentArray = [this.#componentManager.getComponentClassId(Tile), this.#componentManager.getComponentClassId(Terrain), this.#componentManager.getComponentClassId(Renderable)].sort((a, b) => a - b);
         const archetype = this.#archetypesManager.getArchetype(new VectorInt(componentArray));

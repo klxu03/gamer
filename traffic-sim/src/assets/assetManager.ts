@@ -82,12 +82,14 @@ class AssetManager {
 
   #initTextures() {
     this.textures.set("grass", this.#loadTexture("/textures/grass.png"));
+    this.textures.set("grid", this.#loadTexture("/textures/grid.png"));
     this.textures.set("base", this.#loadTexture("/textures/base.png"));
     this.textures.set("specular", this.#loadTexture("/textures/specular.png"));
   }
 
   #initMeshes() {
     this.#meshFactory.set("grass", this.#assetManagerUtils.createGrass());
+    this.#meshFactory.set("grid", this.#assetManagerUtils.createGrid());
   }
 
   /**

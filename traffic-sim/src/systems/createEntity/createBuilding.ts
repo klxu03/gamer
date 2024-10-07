@@ -16,6 +16,12 @@ class CreateBuilding {
     #archetypesManager: ArchetypesManager;
     #renderManager: RenderManager;
 
+    #buildingTypeToId = {
+        [BuildingType.HOUSE]: "residential",
+        [BuildingType.COMMERCIAL]: "commercial",
+        [BuildingType.INDUSTRIAL]: "industrial",
+    }
+
     constructor() {
         CreateBuilding.#instance = this;
         this.#entityManager = EntityManager.getInstance;
@@ -25,15 +31,15 @@ class CreateBuilding {
         this.#renderManager = RenderManager.getInstance;
     }
 
-    public createBuilding(x: number, y: number, z: number): number {
+    public createBuilding(x: number, y: number, z: number, buildingType: BuildingType, model: string): number {
         const entityId = this.#entityManager.createEntity();
 
-        const building = new Building(0, 0, 0, BuildingType.HOUSE, [], x, y, z);
+        const building = new Building(0, 0, 0, buildingType, [], x, y, z);
         this.#componentManager.addEntityToComponent(entityId, building);
 
         const renderBuilding = () => {
-            const mesh = this.#assetManager.getMesh("residential-A1").clone();
-            mesh.userData = { id: "residential" };
+            const mesh = this.#assetManager.getMesh(model).clone();
+            mesh.userData = { id: this.#buildingTypeToId[buildingType] };
             mesh.position.set(x, z, y);
 
             return mesh;
