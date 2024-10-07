@@ -1,62 +1,111 @@
 import * as THREE from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import AssetManagerUtils from './assetManagerUtils';
+import models from './models.json';
+
+type ModelOptions = {
+  recieveShadow?: boolean;
+  castShadow?: boolean;
+  rotation?: number;
+  scale?: number;
+}
 
 class AssetManager {
-    public static instance: AssetManager;
+  static #instance: AssetManager;
 
-    #cube: THREE.BoxGeometry;
-    #loader: THREE.TextureLoader;
-    #textures: Map<string, THREE.Texture>;
+  #assetManagerUtils: AssetManagerUtils;
 
-    #meshFactory: Map<string, THREE.Mesh>;
+  public cube: THREE.BoxGeometry;
+  public textures: Map<string, THREE.Texture>;
 
-    constructor() {
-        this.#cube = new THREE.BoxGeometry(1, 1, 1);
-        this.#loader = new THREE.TextureLoader();
-        this.#textures = new Map();
-        this.#meshFactory = new Map();
+  #meshFactory: Map<string, THREE.Object3D>;
 
-        this.#initTextures();
-        this.#initMeshes();
-    }
+  #textureLoader: THREE.TextureLoader;
+  #gltfLoader = new GLTFLoader();
 
-    #loadTexture(url: string) {
-        const texture = this.#loader.load(url);
-        texture.wrapS = THREE.RepeatWrapping;
-        texture.wrapT = THREE.RepeatWrapping;
-        texture.repeat.set(1, 1);
+  constructor() {
+    AssetManager.#instance = this;
+    this.#assetManagerUtils = new AssetManagerUtils();
 
-        texture.generateMipmaps = true;
-        texture.minFilter = THREE.LinearMipMapLinearFilter;
-        texture.magFilter = THREE.LinearFilter;
+    this.cube = new THREE.BoxGeometry(1, 1, 1);
+    this.#textureLoader = new THREE.TextureLoader();
+    this.textures = new Map();
+    this.#meshFactory = new Map();
 
-        return texture;
-    }
+    this.#initTextures();
+    this.#initMeshes();
+  }
 
-    #initTextures() {
-        this.#textures.set("grass", this.#loadTexture("/textures/grass.png"));
-    }
+  #loadTexture(url: string) {
+    const texture = this.#textureLoader.load(url);
+    texture.wrapS = THREE.RepeatWrapping;
+    texture.wrapT = THREE.RepeatWrapping;
+    texture.repeat.set(1, 1);
 
-    #initMeshes() {
-        const createGrass = () => {
-            const material = new THREE.MeshLambertMaterial({ map: this.#textures.get("grass") });
-            const mesh = new THREE.Mesh(this.#cube, material);
-            mesh.receiveShadow = true;
-            return mesh;
+    texture.generateMipmaps = true;
+    texture.minFilter = THREE.LinearMipMapLinearFilter;
+    texture.magFilter = THREE.LinearFilter;
+
+    return texture;
+  }
+
+  #loadModel(name: string, url: string, options: ModelOptions) {
+    const recieveShadow = options.recieveShadow ?? true;
+    const castShadow = options.castShadow ?? true;
+    const rotation = options.rotation ?? 0;
+    const scale = options.scale ?? 1;
+
+    this.#gltfLoader.load(url, (glb) => {
+      let mesh = glb.scene;
+
+      mesh.traverse((obj) => {
+        if (obj instanceof THREE.Mesh) {
+          obj.material = new THREE.MeshLambertMaterial({
+            map: this.textures.get("base"),
+            specularMap: this.textures.get("specular"),
+          })
+
+          obj.receiveShadow = recieveShadow;
+          obj.castShadow = castShadow;
         }
 
-        this.#meshFactory.set("grass", createGrass());
-    }
+        mesh.rotation.set(0, THREE.MathUtils.degToRad(rotation), 0);
+        mesh.scale.set(scale / 30, scale / 30, scale / 30);
+      })
 
-    public getMesh(id: string): THREE.Mesh {
-        return this.#meshFactory.get(id)!;
-    }
+      mesh.name = name;
 
-    public static get getInstance(): AssetManager {
-        if (!AssetManager.instance) {
-            AssetManager.instance = new AssetManager();
-        }
-        return AssetManager.instance;
+      console.log("finished loading model", name, "mesh is ", mesh);
+      this.#meshFactory.set(name, mesh);
+    });
+  }
+
+  #initTextures() {
+    this.textures.set("grass", this.#loadTexture("/textures/grass.png"));
+    this.textures.set("base", this.#loadTexture("/textures/base.png"));
+    this.textures.set("specular", this.#loadTexture("/textures/specular.png"));
+  }
+
+  #initMeshes() {
+    this.#meshFactory.set("grass", this.#assetManagerUtils.createGrass());
+  }
+
+  public initModels() {
+    for (const [key, value] of Object.entries(models)) {
+      this.#loadModel(key, value.url, value.options);
     }
+  }
+
+  public getMesh(id: string): THREE.Object3D {
+    return this.#meshFactory.get(id)!;
+  }
+
+  public static get getInstance(): AssetManager {
+    if (!AssetManager.#instance) {
+      AssetManager.#instance = new AssetManager();
+    }
+    return AssetManager.#instance;
+  }
 }
 
 export default AssetManager;

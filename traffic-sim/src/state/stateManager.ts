@@ -5,6 +5,7 @@ class StateManager {
     public gameState: GameState;
 
     private constructor() {
+        StateManager.#instance = this;
         this.gameState = new GameState();
     }
 

@@ -2,7 +2,7 @@ import VectorInt from "../dsa/vector_int";
 import Archetype from "./archetype";
 
 class ArchetypesManager {
-    public static instance: ArchetypesManager;
+    static #instance: ArchetypesManager;
 
     /**
      * A map of archetypes, keyed by the components that make up the archetype in ascending order
@@ -20,6 +20,7 @@ class ArchetypesManager {
     public entities: Array<VectorInt>;
 
     constructor() {
+        ArchetypesManager.#instance = this;
         this.#archetypes = new Map();
         this.entities = new Array();
         this.#archetypeBase = new Array();
@@ -71,11 +72,11 @@ class ArchetypesManager {
     }
 
     public static get getInstance(): ArchetypesManager {
-        if (!ArchetypesManager.instance) {
-            ArchetypesManager.instance = new ArchetypesManager();
+        if (!ArchetypesManager.#instance) {
+            ArchetypesManager.#instance = new ArchetypesManager();
         }
 
-        return ArchetypesManager.instance;
+        return ArchetypesManager.#instance;
     }
 }
 

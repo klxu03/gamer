@@ -9,7 +9,7 @@ import VectorInt from "../../dsa/vector_int"
 import RenderManager from "../../utils/renderer/renderManager";
 
 class CreateTerrain {
-    public static instance: CreateTerrain;
+    static #instance: CreateTerrain;
 
     #entityManager: EntityManager;
     #componentManager: ComponentManager;
@@ -17,6 +17,7 @@ class CreateTerrain {
     #archetypesManager: ArchetypesManager;
     #renderManager: RenderManager;
     constructor() {
+        CreateTerrain.#instance = this;
         this.#entityManager = EntityManager.getInstance;
         this.#componentManager = ComponentManager.getInstance;
         this.#assetManager = AssetManager.getInstance;
@@ -44,7 +45,7 @@ class CreateTerrain {
         const renderGrass = () => {
             const mesh = this.#assetManager.getMesh("grass").clone();
             mesh.userData = { id: "grass", x, y };
-            mesh.position.set(x, -0.5, y);
+            mesh.position.set(x, z, y);
 
             return mesh;
         }
@@ -60,6 +61,8 @@ class CreateTerrain {
         this.#renderManager.addRender(() => {
             renderable.render();
 
+            renderable.dirty = false;
+
             return new Promise((resolve) => {
                 resolve(true);
             });
@@ -69,11 +72,11 @@ class CreateTerrain {
     }
 
     public static get getInstance(): CreateTerrain {
-        if (!CreateTerrain.instance) {
-            CreateTerrain.instance = new CreateTerrain();
+        if (!CreateTerrain.#instance) {
+            CreateTerrain.#instance = new CreateTerrain();
         }
 
-        return CreateTerrain.instance;
+        return CreateTerrain.#instance;
     }
 }
 

@@ -1,0 +1,280 @@
+{
+  "under-construction": {
+    "type": "zone",
+    "url": "/models/construction-small.glb",
+    "options": {
+      "scale": 3
+    }
+  },
+  "residential-A1": {
+    "type": "zone",
+    "url": "/models/building-house-block-big.glb",
+    "options": {}
+  },
+  "residential-B1": {
+    "type": "zone",
+    "url": "/models/building-house-family-small.glb",
+    "options": {}
+  },
+  "residential-C1": {
+    "type": "zone",
+    "url": "/models/building-house-family-large.glb",
+    "options": {}
+  },
+  "residential-A2": {
+    "type": "zone",
+    "url": "/models/building-block-4floor-short.glb",
+    "options": {}
+  },
+  "residential-B2": {
+    "type": "zone",
+    "url": "/models/building-block-4floor-corner.glb",
+    "options": {}
+  },
+  "residential-C2": {
+    "type": "zone",
+    "url": "/models/building-block-5floor.glb",
+    "options": {}
+  },
+  "residential-A3": {
+    "type": "zone",
+    "url": "/models/building-office-balcony.glb",
+    "options": {}
+  },
+  "residential-B3": {
+    "type": "zone",
+    "url": "/models/building-office-pyramid.glb",
+    "options": {}
+  },
+  "residential-C3": {
+    "type": "zone",
+    "url": "/models/building-office-tall.glb",
+    "options": {}
+  },
+  "commercial-A1": {
+    "type": "zone",
+    "url": "/models/building-cafe.glb",
+    "options": {}
+  },
+  "commercial-B1": {
+    "type": "zone",
+    "url": "/models/building-burger-joint.glb",
+    "options": {}
+  },
+  "commercial-C1": {
+    "type": "zone",
+    "url": "/models/building-restaurant.glb",
+    "options": {}
+  },
+  "commercial-A2": {
+    "type": "zone",
+    "url": "/models/building-cinema.glb",
+    "options": {}
+  },
+  "commercial-B2": {
+    "type": "zone",
+    "url": "/models/building-casino.glb",
+    "options": {}
+  },
+  "commercial-C2": {
+    "type": "zone",
+    "url": "/models/data-center.glb",
+    "options": {}
+  },
+  "commercial-A3": {
+    "type": "zone",
+    "url": "/models/building-office.glb",
+    "options": {}
+  },
+  "commercial-B3": {
+    "type": "zone",
+    "url": "/models/building-office-big.glb",
+    "options": {}
+  },
+  "commercial-C3": {
+    "type": "zone",
+    "url": "/models/building-skyscraper.glb",
+    "options": {}
+  },
+  "industrial-A1": {
+    "type": "zone",
+    "url": "/models/industry-factory.glb",
+    "options": {}
+  },
+  "industrial-B1": {
+    "type": "zone",
+    "url": "/models/industry-refinery.glb",
+    "options": {}
+  },
+  "industrial-C1": {
+    "type": "zone",
+    "url": "/models/industry-warehouse.glb",
+    "options": {}
+  },
+  "industrial-A2": {
+    "type": "zone",
+    "url": "/models/industry-factory.glb",
+    "options": {}
+  },
+  "industrial-B2": {
+    "type": "zone",
+    "url": "/models/industry-refinery.glb",
+    "options": {}
+  },
+  "industrial-C2": {
+    "type": "zone",
+    "url": "/models/industry-warehouse.glb",
+    "options": {}
+  },
+  "industrial-A3": {
+    "type": "zone",
+    "url": "/models/industry-factory.glb",
+    "options": {}
+  },
+  "industrial-B3": {
+    "type": "zone",
+    "url": "/models/industry-refinery.glb",
+    "options": {}
+  },
+  "industrial-C3": {
+    "type": "zone",
+    "url": "/models/industry-warehouse.glb",
+    "options": {}
+  },
+  "power-plant": {
+    "type": "power",
+    "url": "/models/industry-factory-old.glb",
+    "options": {}
+  },
+  "power-line": {
+    "type": "power",
+    "url": "/models/power_line_pole_modified.glb",
+    "options": {}
+  },
+  "road-straight": {
+    "type": "road",
+    "url": "/models/tile-road-straight.glb",
+    "options": {
+      "castShadow": false
+    }
+  },
+  "road-end": {
+    "type": "road",
+    "url": "/models/tile-road-end.glb",
+    "options": {
+      "castShadow": false
+    }
+  },
+  "road-corner": {
+    "type": "road",
+    "url": "/models/tile-road-curve.glb",
+    "options": {
+      "castShadow": false
+    }
+  },
+  "road-three-way": {
+    "type": "road",
+    "url": "/models/tile-road-intersection-t.glb",
+    "options": {
+      "castShadow": false
+    }
+  },
+  "road-four-way": {
+    "type": "road",
+    "url": "/models/tile-road-intersection.glb",
+    "options": {
+      "castShadow": false
+    }
+  },
+  "grass": {
+    "type": "terrain",
+    "url": "/models/tile-plain_grass.glb",
+    "options": {
+      "castShadow": false
+    }
+  },
+  "car-taxi": {
+    "type": "vehicle",
+    "url": "/models/car-taxi.glb",
+    "options": {
+      "rotation": 90
+    }
+  },
+  "car-police": {
+    "type": "vehicle",
+    "url": "/models/car-police.glb",
+    "options": {
+      "rotation": 90
+    }
+  },
+  "car-passenger": {
+    "type": "vehicle",
+    "url": "/models/car-passenger.glb",
+    "options": {
+      "rotation": 90
+    }
+  },
+  "car-veteran": {
+    "type": "vehicle",
+    "url": "/models/car-veteran.glb",
+    "options": {
+      "rotation": 90
+    }
+  },
+  "truck": {
+    "type": "vehicle",
+    "url": "/models/truck.glb",
+    "options": {
+      "rotation": 90
+    }
+  },
+  "car-hippie-van": {
+    "type": "vehicle",
+    "url": "/models/car-hippie-van.glb",
+    "options": {
+      "rotation": 90
+    }
+  },
+  "car-tow-truck": {
+    "type": "vehicle",
+    "url": "/models/car-tow-truck.glb",
+    "options": {
+      "rotation": 90
+    }
+  },
+  "car-ambulance-pickup": {
+    "type": "vehicle",
+    "url": "/models/car-ambulance-pickup.glb",
+    "options": {
+      "rotation": 90
+    }
+  },
+  "car-passenger-race": {
+    "type": "vehicle",
+    "url": "/models/car-passenger-race.glb",
+    "options": {
+      "rotation": 90
+    }
+  },
+  "car-baywatch": {
+    "type": "vehicle",
+    "url": "/models/car-baywatch.glb",
+    "options": {
+      "rotation": 90
+    }
+  },
+  "car-truck-dump": {
+    "type": "vehicle",
+    "url": "/models/car-truck-dump.glb",
+    "options": {
+      "rotation": 90
+    }
+  },
+  "car-truck-armored-truck": {
+    "type": "vehicle",
+    "url": "/models/armored-truck.glb",
+    "options": {
+      "rotation": 90
+    }
+  }
+}

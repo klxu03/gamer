@@ -3,7 +3,7 @@ import ArchetypesManager from "../archetypes/archetypesManager";
 import VectorInt from "../dsa/vector_int";
 
 class EntityManager {
-    public static instance: EntityManager;
+    static #instance: EntityManager;
 
     maxEntityCount: number;
     availableEntities: Set<number>;
@@ -12,6 +12,7 @@ class EntityManager {
     #archetypesManager: ArchetypesManager;
 
     constructor() {
+        EntityManager.#instance = this;
         this.maxEntityCount = 0;
         this.availableEntities = new Set();
 
@@ -54,11 +55,11 @@ class EntityManager {
     }
 
     public static get getInstance(): EntityManager {
-        if (!EntityManager.instance) {
-            EntityManager.instance = new EntityManager();
+        if (!EntityManager.#instance) {
+            EntityManager.#instance = new EntityManager();
         }
 
-        return EntityManager.instance;
+        return EntityManager.#instance;
     }
 }
 

@@ -2,12 +2,12 @@ import Component from "./component";
 import Renderable from "./renderable";
 import Tile from "./core/tile";
 import Terrain from "./renderable/terrain";
-import Building from "./renderable/building";
+import { Building } from "./renderable/building";
 
 type ComponentClass = typeof Component | (new (...args: any[]) => Component);
 
 class ComponentManager {
-    public static instance: ComponentManager;
+    static #instance: ComponentManager;
 
     /**
      * Array of component classes
@@ -27,6 +27,7 @@ class ComponentManager {
     public componentList: Array<Array<Component | null>>;
 
     constructor() {
+        ComponentManager.#instance = this;
         this.components = new Array();
         this.componentMap = new Map();
         this.componentList = new Array();
@@ -73,11 +74,11 @@ class ComponentManager {
     }
 
     public static get getInstance(): ComponentManager {
-        if (!ComponentManager.instance) {
-            ComponentManager.instance = new ComponentManager();
+        if (!ComponentManager.#instance) {
+            ComponentManager.#instance = new ComponentManager();
         }
 
-        return ComponentManager.instance;
+        return ComponentManager.#instance;
     }
 }
 

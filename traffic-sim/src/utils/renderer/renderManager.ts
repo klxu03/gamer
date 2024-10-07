@@ -32,7 +32,6 @@ class RenderManager {
      * @param renderFunction The function to be rendered to the scene
      */
     public addRender(renderFunction: () => void) {
-        console.log("Adding render function to queue", renderFunction);
         this.#renderQueue.push(renderFunction);
     }
 

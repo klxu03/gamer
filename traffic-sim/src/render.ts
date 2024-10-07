@@ -13,6 +13,7 @@ class Renderer {
     #renderManager: RenderManager;
 
     constructor() {
+        Renderer.#instance = this;
         this.#gameWindow = document.getElementById('render-target')!;
         this.scene = new THREE.Scene();
         this.#renderer = new THREE.WebGLRenderer();
@@ -53,6 +54,7 @@ By following this approach, your renderer will efficiently handle updates in syn
         if (!Renderer.#instance) {
             Renderer.#instance = new Renderer();
         }
+
         return Renderer.#instance;
     }
 }
