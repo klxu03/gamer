@@ -22,6 +22,9 @@ export default function initSystem() {
     // Create the terrain block
     const terrainId = CreateTerrain.getInstance.createTerrain(true, 0, 0, 0);
 
-    // Rotate the terrain block
-    rotateCube(terrainId);
+    // Start rotating the cube
+    TickManager.getInstance.addDirty(() => {
+        rotateCube(terrainId);
+        return Date.now();
+    });
 }
