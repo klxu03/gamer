@@ -1,10 +1,10 @@
-import ComponentManager from "../components/componentManager";
-import EntityManager from "../entities/entityManager";
-import ArchetypesManager from "../archetypes/archetypesManager";
-import CreateTerrain from "./createEntity/createTerrain";
+import ComponentManager from "../../components/componentManager";
+import EntityManager from "../../entities/entityManager";
+import ArchetypesManager from "../../archetypes/archetypesManager";
+import CreateTerrain from "../createEntity/createTerrain";
 
 import rotateCube from "./rotateCube";
-import { TickManager } from "../utils/ticker/tickManager";
+import { TickManager } from "../../utils/ticker/tickManager";
 
 /**
  * Initialize the logic and frames for the game

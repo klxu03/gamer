@@ -1,6 +1,6 @@
-import ComponentManager from "../components/componentManager";
-import Renderable from "../components/renderable";
-import { TickManager } from "../utils/ticker/tickManager";
+import ComponentManager from "../../components/componentManager";
+import Renderable from "../../components/renderable";
+import { TickManager } from "../../utils/ticker/tickManager";
 
 export default function rotateCube(entity: number) {
     const componentManager = ComponentManager.getInstance;

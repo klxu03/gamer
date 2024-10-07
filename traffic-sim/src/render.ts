@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import Camera from './utils/renderer/camera';
 import RenderManager from './utils/renderer/renderManager';
-import initSystem from './systems/initSystem';
+import initSystem from './systems/init';
 
 class Renderer {
     static #instance: Renderer;
