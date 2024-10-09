@@ -6,6 +6,7 @@ import initTerrain from "./initTerrain";
 import initLights from "./initLights";
 import AssetManager from "../../assets/assetManager";
 import RenderManager from "../../utils/renderer/renderManager";
+import { Building } from "../../components/renderable/building";
 
 import rotateCube from "./rotateCube";
 import buildingGallery from "./buildingGallery";
@@ -37,9 +38,11 @@ export default async function initSystem() {
             resolve(true);
         });
     });
+    // Initialize the static variable for Building
+    Building.entityManager = EntityManager.getInstance;
 
     RenderManager.getInstance.addRender(() => {
-        buildingGallery("commercial");
+        buildingGallery();
 
         return new Promise((resolve) => {
             resolve(true);

@@ -1,4 +1,5 @@
-import * as THREE from 'three';
+// import * as THREE from 'three';
+import * as THREE from 'three-webgpu';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import AssetManagerUtils from './assetManagerUtils';
 import models from './models.json';
@@ -50,7 +51,7 @@ class AssetManager {
   }
 
   async #loadModel(name: string, url: string, options: ModelOptions) {
-    const recieveShadow = options.recieveShadow ?? true;
+    const receiveShadow = options.recieveShadow ?? true;
     const castShadow = options.castShadow ?? true;
     const rotation = options.rotation ?? 0;
     const scale = options.scale ?? 1;
@@ -66,13 +67,13 @@ class AssetManager {
           specularMap: this.textures.get("specular"),
         })
 
-        obj.receiveShadow = recieveShadow;
+        obj.receiveShadow = receiveShadow;
         obj.castShadow = castShadow;
       }
 
       mesh.rotation.set(0, THREE.MathUtils.degToRad(rotation), 0);
       mesh.scale.set(scale / 30, scale / 30, scale / 30);
-    })
+    });
 
     mesh.name = name;
 

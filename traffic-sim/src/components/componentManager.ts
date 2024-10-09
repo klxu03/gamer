@@ -1,6 +1,5 @@
 import Component from "./component";
 import Renderable from "./renderable";
-import Tile from "./core/tile";
 import Terrain from "./renderable/terrain";
 import { Building } from "./renderable/building";
 
@@ -43,14 +42,11 @@ class ComponentManager {
         this.components.push(Renderable);
         this.componentMap.set(Renderable, 1);
 
-        this.components.push(Tile);
-        this.componentMap.set(Tile, 2);
-
         this.components.push(Terrain);
-        this.componentMap.set(Terrain, 3);
+        this.componentMap.set(Terrain, 2);
 
         this.components.push(Building);
-        this.componentMap.set(Building, 4);
+        this.componentMap.set(Building, 3);
     }
 
     #initComponentList() {

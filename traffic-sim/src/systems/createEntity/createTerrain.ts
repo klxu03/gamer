@@ -1,6 +1,5 @@
 import EntityManager from "../../entities/entityManager";
 import ComponentManager from "../../components/componentManager";
-import Tile from "../../components/core/tile";
 import Terrain from "../../components/renderable/terrain";
 import AssetManager from "../../assets/assetManager";
 import Renderable from "../../components/renderable";
@@ -67,16 +66,14 @@ class CreateTerrain {
      */
     createTerrain(isDevelopable: boolean, x: number, y: number, z: number): number {
         const entityId = this.#entityManager.createEntity();
-
-        const tile = new Tile(x, y, 0);
-        this.#componentManager.addEntityToComponent(entityId, tile);
+        this.#entityManager.tileManager.set([x, y], entityId);
 
         const terrain = new Terrain(isDevelopable);
         this.#componentManager.addEntityToComponent(entityId, terrain);
 
         const renderable = this.#createGridTerrain(entityId, x, y, z);
 
-        const componentArray = [this.#componentManager.getComponentClassId(Tile), this.#componentManager.getComponentClassId(Terrain), this.#componentManager.getComponentClassId(Renderable)].sort((a, b) => a - b);
+        const componentArray = [this.#componentManager.getComponentClassId(Terrain), this.#componentManager.getComponentClassId(Renderable)].sort((a, b) => a - b);
         const archetype = this.#archetypesManager.getArchetype(new VectorInt(componentArray));
         this.#archetypesManager.addEntity(archetype, entityId);
 

@@ -1,4 +1,5 @@
-import * as THREE from 'three';
+// import * as THREE from 'three';
+import * as THREE from 'three-webgpu';
 import Renderer from '../../render';
 
 export default function initLights() {
@@ -16,7 +17,7 @@ export default function initLights() {
 
     Renderer.getInstance.scene.add(sun);
 
-    const enableHelper = false;
+    const enableHelper = true;
     if (enableHelper) {
         const helper = new THREE.CameraHelper(sun.shadow.camera);
         Renderer.getInstance.scene.add(helper);

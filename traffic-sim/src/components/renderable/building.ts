@@ -1,5 +1,6 @@
 import Component from "../component";
 import VectorInt from "../../dsa/vector_int";
+import EntityManager from "../../entities/entityManager";
 
 enum BuildingType {
     HOUSE = 0,
@@ -8,6 +9,8 @@ enum BuildingType {
 }
 
 class Building extends Component {
+    static entityManager: EntityManager;
+
     level: number;
     maxLevel: number;
 
@@ -24,9 +27,17 @@ class Building extends Component {
      */
     tilesOccupied: Array<Array<boolean>>;
 
+    /**
+     * Lowest x and y coordinate of this building, (0, 0) of tilesOccupied
+     */
     x: number;
     y: number;
     z: number;
+
+    /**
+     * The entity ID of the tile that is the origin of this building
+     */
+    originTile: number;
 
     constructor(level: number, maxLevel: number, maxOccupants: number, type: BuildingType, tilesOccupied: Array<Array<boolean>>, x: number, y: number, z: number) {
         super();
@@ -43,6 +54,8 @@ class Building extends Component {
         this.x = x;
         this.y = y;
         this.z = z;
+
+        this.originTile = Building.entityManager.tileManager.get([x, y])!;
     }
 }
 

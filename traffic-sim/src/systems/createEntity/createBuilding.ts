@@ -31,10 +31,10 @@ class CreateBuilding {
         this.#renderManager = RenderManager.getInstance;
     }
 
-    public createBuilding(x: number, y: number, z: number, buildingType: BuildingType, model: string): number {
+    public createBuilding(level: number, maxLevel: number, maxOccupants: number, tilesOccupied: Array<Array<boolean>>, x: number, y: number, z: number, buildingType: BuildingType, model: string): number {
         const entityId = this.#entityManager.createEntity();
 
-        const building = new Building(1, 3, 4, buildingType, [], x, y, z);
+        const building = new Building(level, maxLevel, maxOccupants, buildingType, tilesOccupied, x, y, z);
         this.#componentManager.addEntityToComponent(entityId, building);
 
         const renderBuilding = () => {

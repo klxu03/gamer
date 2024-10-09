@@ -11,6 +11,12 @@ class EntityManager {
     #componentManager: ComponentManager;
     #archetypesManager: ArchetypesManager;
 
+    /**
+     * Map the tile position in x, y to the entity built on it
+     * If no building, then it will be the terrain entity ID
+     */
+    public tileManager: Map<Array<number>, number>;
+
     constructor() {
         EntityManager.#instance = this;
         this.maxEntityCount = 0;
@@ -18,6 +24,8 @@ class EntityManager {
 
         this.#componentManager = ComponentManager.getInstance;
         this.#archetypesManager = ArchetypesManager.getInstance;
+
+        this.tileManager = new Map();
     }
 
     public createEntity(): number {

@@ -1,13 +1,15 @@
-import * as THREE from 'three';
+import * as THREE from 'three-webgpu';
 import Camera from './utils/renderer/camera';
 import RenderManager from './utils/renderer/renderManager';
 import initSystem from './systems/init';
+
+import config from '../config';
 
 class Renderer {
     static #instance: Renderer;
     #gameWindow: HTMLElement;
     scene: THREE.Scene;
-    #renderer: THREE.WebGLRenderer;
+    #renderer: THREE.WebGLRenderer | THREE.WebGPURenderer;
     #camera: THREE.PerspectiveCamera;
 
     #renderManager: RenderManager;
@@ -16,10 +18,20 @@ class Renderer {
         Renderer.#instance = this;
         this.#gameWindow = document.getElementById('render-target')!;
         this.scene = new THREE.Scene();
-        this.#renderer = new THREE.WebGLRenderer();
+
+        if (config.usingWebGPU) {
+            this.#renderer = new THREE.WebGPURenderer();
+            this.#renderer.setClearColor(new THREE.Color(0x000000));
+        } else {
+            this.#renderer = new THREE.WebGLRenderer();
+            this.#renderer.setClearColor(0x000000, 0);
+        }
+
+        this.#renderer.shadowMap.enabled = true;
+        this.#renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
         this.#camera = Camera.getInstance.cameraInstance.camera;
         this.#renderer.setSize(this.#gameWindow.offsetWidth, this.#gameWindow.offsetHeight);
-        this.#renderer.setClearColor(0x000000, 0);
         this.#gameWindow.appendChild(this.#renderer.domElement);
 
         this.#renderManager = RenderManager.getInstance;

@@ -35,6 +35,9 @@ class OrbitalCamera {
         this.elevation = CAMERA_DEFAULT.ELEVATION;
 
         this.#updateCameraPosition();
+
+        this.camera.position.set(20, 10, 20);
+        this.camera.lookAt(this.origin);
     }
 
     #updateCameraPosition() {

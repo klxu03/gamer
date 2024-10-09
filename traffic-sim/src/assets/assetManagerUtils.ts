@@ -26,7 +26,7 @@ class AssetManagerUtils {
         ];
 
         // Create the mesh with the cube geometry and the array of materials
-        const mesh = new THREE.Mesh(this.#assetManager.cube.clone().scale(1, 0.1, 1), materials);
+        const mesh = new THREE.Mesh(this.#assetManager.cube.clone().scale(1, 0.3, 1), materials);
         mesh.receiveShadow = true;
         mesh.name = "grass";
 
@@ -51,7 +51,7 @@ class AssetManagerUtils {
         ];
 
         // Create the mesh with the cube geometry and the array of materials
-        const mesh = new THREE.Mesh(this.#assetManager.cube.clone().scale(1, 0.1, 1), materials);
+        const mesh = new THREE.Mesh(this.#assetManager.cube.clone().scale(1, 0.3, 1), materials);
         mesh.receiveShadow = true;
         mesh.name = "grid";
 
